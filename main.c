@@ -51,11 +51,13 @@ int main(){
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 TILE currentTile = getTile(i,j);
-                rsArr[i][j] = readReedSwitch(currentTile.rs);
+                //printf("%s\n", currentTile.rs.filePath);
+                rsArr[i][j] = readIntFromFile(currentTile.rs.filePath);
+                //printf("%d\n",readIntFromFile(currentTile.rs.filePath));
             }
         }
         print2DArray(BOARD_SIZE, BOARD_SIZE, rsArr);
-        printf("----------------");
+        printf("----------------\n");
         sleep(1);
     }
     
