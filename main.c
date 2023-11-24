@@ -2,6 +2,16 @@
 #include "LED_Matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
+void print2DArray(int rows, int cols, int array[rows][cols]) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", array[i][j]);
+        }
+        printf("\n");
+    }
+}
 
 void printArrayInRows(const int* array, int size, int elementsPerRow) {
     for (int i = 0; i < size; i++) {
@@ -33,18 +43,21 @@ typedef enum {
 } STATE;
 
 int main(){
-    //STATE state = IDLE;
-    //int* moveArray;
-    //initChessboard();
     int* moveArr;
     int* led_arr;
+    int rsArr[BOARD_SIZE][BOARD_SIZE] = {0};
     initChessboard();
-    //initChessboardForTesting();
-    moveArr = getPossibleMoves(1,1);
-    printArrayInRows(moveArr, 8*8, 8);
-    led_arr = convertToLEDarray(moveArr);
-    printArray(led_arr, 8);
-    displayFromArr(led_arr);
+    while(1){
+        for(int i = 0; i < BOARD_SIZE; i++){
+            for(int j = 0; j < BOARD_SIZE; j++){
+                TILE currentTile = getTile(i,j);
+                rsArr[i][j] = readReedSwitch(currentTile.rs);
+            }
+        }
+        print2DArray(BOARD_SIZE, BOARD_SIZE, rsArr);
+        printf("----------------");
+        sleep(1);
+    }
     
     free(moveArr);
     free(led_arr);
