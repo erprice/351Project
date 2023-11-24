@@ -144,7 +144,8 @@ static reedSwitch initReedSwitch(int header_num, int pin_num){
     configPin(header_num, pin_num, 0);
     sprintf(path, "/sys/class/gpio/gpio%d/value", getGPIO(header_num, pin_num));
     rs.filePath = path;
-    rs.value = 0;
+    printf(path);
+    rs.value = readIntFromFile(path);
     return rs;
 }
 
