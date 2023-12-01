@@ -40,7 +40,6 @@ void printArray(int arr[], int size) {
 int main(){
     initChessboard();
     while(1){
-        reedSwitchUpdate();
-        gameUpdate();
+        displayRSValues();   
     }
 }
