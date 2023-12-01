@@ -52,7 +52,7 @@ void gameUpdate(){
                     moveArr = getPossibleMoves(currentX, currentY);
                     for (int g = 0; g < 64; ++g) {
                         printf("%d ", moveArr[g]);
-                        if(g % 8 == 0){
+                        if((g+1) % 8 == 0){
                             printf("\n");
                         }
                     }

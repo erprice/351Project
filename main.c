@@ -41,11 +41,11 @@ int main(){
     initChessboard();
     int x, y;
     while(1){
-        printf("%d", getState());
+        printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
         displayRSValues();
         printf("\n");
         displayBoard();
-        printf("-----");
+        printf("-----\n");
         printf("X value: ");
         scanf("%d", &x);
         printf("Y value: ");
