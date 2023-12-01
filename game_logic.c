@@ -39,7 +39,7 @@ STATE getState(){
 void gameUpdate(){
     switch (state){
     case WAITING:
-        displayFromArr(OFF); //Turn off all leds
+        resetDisplay(); //Turn off all leds
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){

@@ -7,5 +7,6 @@ void displayInteger(int value);
 void turnOnDisplay();
 void turnOffDisplay();
 void displayFromArr(const int LED_Arr[]);
+void resetDisplay();
 
 #endif
