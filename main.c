@@ -40,6 +40,7 @@ void printArray(int arr[], int size) {
 int main(){
     initChessboard();
     int x, y;
+    reset_Display();
     while(1){
         printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
         displayRSValues();
