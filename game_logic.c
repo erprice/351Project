@@ -27,9 +27,11 @@ int* moveArr;
 int* moveArr2;
 int currentX;
 int currentY;
+int wrongX;
+int wrongY;
 
 const int OFF[8] = {[0 ... 7] = 0b00000000};
-const int ON[8*8] = {[0 ... 63] = 1};
+const int ON[8*8] = {[0 ... 63] = 0b11111111};
 
 //Runs one iteration of the game update() loop
 STATE getState(){
@@ -82,6 +84,7 @@ void gameUpdate(){
                     //Moving piece to empty tile
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
+
                         free(moveArr);
                         turn = !turn; //change turns
                         currentColour = !currentColour;
@@ -89,10 +92,13 @@ void gameUpdate(){
                         reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
+                        wrongX = i;
+                        wrongY = j;
                         printf("INVALID PLACEMENT\n");                   
                         //Not valid placement
                     }
                 } else if (currentTile.piece != EMPTY && getColour(currentTile.piece) != currentColour && currentTile.rs.value == 0){
+                    //wait until it reads 1 again
                     //Capturing a piece
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
@@ -126,9 +132,15 @@ void gameUpdate(){
         break;
         }
     case INVALID_PLACEMENT:
-        exit(1);
-        //TODO
+        {
+        displayFromArr(ON);
+        TILE tile = getTile(wrongX, wrongY);
+        if(tile.rs.value == 0){
+            state = PICKED_UP;
+            displayFromArr(moveArr2);
+        }
         break;
+        }
     }
 }
 
