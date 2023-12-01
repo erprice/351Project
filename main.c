@@ -1,5 +1,6 @@
 #include "board.h"
 #include "LED_Matrix.h"
+#include "game_logic.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -36,32 +37,9 @@ void printArray(int arr[], int size) {
     printf("\n");
 }
 
-typedef enum {
-    IDLE,
-    PICKED_UP,
-    PLACED_DOWN,
-} STATE;
-
 int main(){
     int* moveArr;
-    int* led_arr;
-    int rsArr[BOARD_SIZE][BOARD_SIZE] = {0};
-    initChessboard();
-    while(1){
-        for(int i = 0; i < BOARD_SIZE; i++){
-            for(int j = 0; j < BOARD_SIZE; j++){
-                TILE currentTile = getTile(i,j);
-                rsArr[i][j] = readReedSwitch(currentTile.rs);
-            }
-        }
-        print2DArray(BOARD_SIZE, BOARD_SIZE, rsArr);
-        printf("----------------");
-        sleep(1);
-    }
-    
-    free(moveArr);
-    free(led_arr);
-    //displayBoard();
-    //movePiece(1,1,2,2);
-    //displayBoard();
+    initChessboardForTesting();
+    gameFunction();
+
 }

@@ -26,7 +26,7 @@ typedef enum {
 
 //helper functions
 static reedSwitch initReedSwitch(int header_num, int pin_num);
-//static void init6x6board();
+static void placePieces5x5();
 static int readIntFromFile(char* filePath);
 static int* getPossiblePawnMoves(int x, int y);
 static int* getPossibleRookMoves(int x, int y);
@@ -35,8 +35,7 @@ static int* getPossibleKnightMoves(int x, int y);
 static int* getPossibleQueenMoves(int x, int y);
 static int* getPossibleKingMoves(int x, int y);
 static bool isValid(int x, int y, int colour);
-static int getColour(char c);
-static int getIndex(int x, int y);
+int getColour(char c);
 static bool isEnemy(int x, int y, int colour);
 static bool isEmpty(int x, int y);
 static bool inBounds(int n);
@@ -53,7 +52,9 @@ void initChessboard(){
         }
     }
 
-    board[1][1].piece = 'q';
+    if(BOARD_SIZE == 5){
+        placePieces5x5();
+    }
 }
 
 void initChessboardForTesting(){
@@ -61,11 +62,16 @@ void initChessboardForTesting(){
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             board[i][j].piece = EMPTY;
+            if(i != 2){
+                board[i][j].rs.value = 1;
+            } else {
+                board[i][j].rs.value = 0;
+            }
         }
     }
-
-    board[1][1].piece = 'Q';
-    board[5][5].piece = 'r';
+    if (BOARD_SIZE == 5){
+        placePieces5x5();
+    }
 }
 
 int* getPossibleMoves(int x, int y){
@@ -112,11 +118,7 @@ void displayBoard(){
     for (int i = 0; i < BOARD_SIZE; i++) {
         for(int j = 0; j < BOARD_SIZE; j++){
             char piece = board[i][j].piece;
-            if(piece == EMPTY){
-                printf("0 ");    
-            } else {
-                printf("%c ", piece);
-            }
+            printf("%c ", piece);
         }
         printf("\n");
     }
@@ -426,6 +428,24 @@ static int* getPossibleKnightMoves(int x, int y){
     return result;
 }
 
+static void placePieces5x5(){
+    char pieceList[5*5] = {
+        'r', 'n', 'b', 'q', 'k',
+        'p', 'p', 'p', 'p', 'p',
+        ' ', ' ', ' ', ' ', ' ',
+        'P', 'P', 'P', 'P', 'P',
+        'R', 'N', 'B', 'Q', 'K'
+    };
+    int k = 0;
+
+    for (int i = 0; i < 5; i++){
+        for(int j = 0; j < 5; j++){
+            board[i][j].piece = pieceList[k];
+            k++;
+        }
+    }
+}
+
 static bool isValid(int x, int y, int colour){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
@@ -458,7 +478,7 @@ static bool isEnemy(int x, int y, int colour){
     }
 }
 
-static int getColour(char c){
+int getColour(char c){
     //Uppercase = WHITE, Lowercase = BLACK 
     char capsC = toupper(c);
     if(capsC != PAWN && capsC != ROOK && capsC != BISHOP && capsC != QUEEN && capsC != KNIGHT && capsC != KING){
@@ -471,7 +491,7 @@ static int getColour(char c){
     }
 }
 
-static int getIndex(int x, int y){
+int getIndex(int x, int y){
     return x*8 + y;
 }
 

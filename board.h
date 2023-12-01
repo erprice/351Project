@@ -25,6 +25,8 @@ int* getPossibleMoves(int x, int y);
 
 void displayBoard();
 
+int getIndex(int x, int y);
+
 int readReedSwitch(reedSwitch rs);
 
 bool isPickedUp(TILE tile);
@@ -36,6 +38,8 @@ int* convertToLEDarray(int* array);
 int arrayToBinaryInteger(int* array);
 
 void movePiece(int x, int y, int x2, int y2);
+
+int getColour(char c);
 
 TILE getTile(int x, int y);
 
