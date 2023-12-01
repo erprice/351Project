@@ -154,7 +154,7 @@ static reedSwitch initReedSwitch(int header_num, int pin_num){
     return rs;
 }
 
-int readIntFromFile(char* filePath){
+static int readIntFromFile(char* filePath){
 
     FILE *pFile = fopen(filePath, "r");
     //int num;

@@ -38,7 +38,6 @@ void printArray(int arr[], int size) {
 }
 
 int main(){
-    int* moveArr;
     initChessboardForTesting();
     gameFunction();
 
