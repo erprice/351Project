@@ -6,6 +6,6 @@ void displayInteger(int value);
 //void displayDouble(double value);
 void turnOnDisplay();
 void turnOffDisplay();
-void displayFromArr(int LED_Arr[]);
+void displayFromArr(const int LED_Arr[]);
 
 #endif

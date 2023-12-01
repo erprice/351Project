@@ -1,4 +1,5 @@
 #include "board.h"
+#include "LED_Matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -26,11 +27,14 @@ int* moveArr;
 int currentX;
 int currentY;
 
+const int OFF[8*8] = {0};
+const int ON[8*8] = {[0 ... 63] = 1};
 
 //Runs one iteration of the game update() loop
 void gameUpdate(){
     switch (state){
     case WAITING:
+        displayFromArr(OFF); //Turn off all leds
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
@@ -42,6 +46,7 @@ void gameUpdate(){
                     currentX = i;
                     currentY = j;
                     moveArr = getPossibleMoves(currentX, currentY);
+                    displayFromArr(moveArr);
                     //light up LEDs
                     break;
                 } else if (currentTile.piece != EMPTY && getColour(currentTile.piece) != currentColour && currentTile.rs.value == 0){
@@ -110,13 +115,10 @@ void gameUpdate(){
 }
 
 void reedSwitchUpdate(){
-    while (1)
-    {
-        for(int i = 0; i < BOARD_SIZE; i++){
-            for(int j = 0; j < BOARD_SIZE; j++){
-                TILE currentTile = getTile(i, j);
-                setRSValue(i, j, readReedSwitch(currentTile.rs));
-            }
+    for(int i = 0; i < BOARD_SIZE; i++){
+        for(int j = 0; j < BOARD_SIZE; j++){
+            TILE currentTile = getTile(i, j);
+            setRSValue(i, j, readReedSwitch(currentTile.rs));
         }
     }
 }

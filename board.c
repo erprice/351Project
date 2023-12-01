@@ -28,6 +28,7 @@ typedef enum {
 //helper functions
 static reedSwitch initReedSwitch(int header_num, int pin_num);
 static void placePieces5x5();
+static void placePieces3x3();
 static int readIntFromFile(char* filePath);
 static int* getPossiblePawnMoves(int x, int y);
 static int* getPossibleRookMoves(int x, int y);
@@ -52,7 +53,9 @@ void initChessboard(){
             n++;
         }
     }
-
+    if(BOARD_SIZE == 3){
+        placePieces3x3();
+    }
     if(BOARD_SIZE == 5){
         placePieces5x5();
     }
@@ -63,14 +66,13 @@ void initChessboardForTesting(){
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             board[i][j].piece = EMPTY;
-            if(i != 2){
-                board[i][j].rs.value = 1;
-            } else {
-                board[i][j].rs.value = 0;
-            }
         }
     }
-    if (BOARD_SIZE == 5){
+    
+    if(BOARD_SIZE == 3){
+        placePieces3x3();
+    }
+    if(BOARD_SIZE == 5){
         placePieces5x5();
     }
 }
@@ -119,6 +121,9 @@ void displayBoard(){
     for (int i = 0; i < BOARD_SIZE; i++) {
         for(int j = 0; j < BOARD_SIZE; j++){
             char piece = board[i][j].piece;
+            if(piece == EMPTY){
+                piece = '0';
+            }
             printf("%c ", piece);
         }
         printf("\n");
@@ -444,19 +449,44 @@ static int* getPossibleKnightMoves(int x, int y){
     }
     return result;
 }
+static void placePieces3x3(){
+    char pieceList[3*3] = {
+        'K', ' ', ' ',
+        ' ', ' ', ' ',
+        ' ', ' ', 'k'
+    };
+    int k = 0;
+
+    for (int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(pieceList[k] == EMPTY){
+                board[i][j].rs.value = 0;
+            } else {
+                board[i][j].rs.value = 1;
+            }
+            board[i][j].piece = pieceList[k];
+            k++;
+        }
+    }
+}
 
 static void placePieces5x5(){
     char pieceList[5*5] = {
-        'r', 'n', 'b', 'q', 'k',
-        'p', 'p', 'p', 'p', 'p',
+        'K', ' ', ' ', ' ', ' ',
         ' ', ' ', ' ', ' ', ' ',
-        'P', 'P', 'P', 'P', 'P',
-        'R', 'N', 'B', 'Q', 'K'
+        ' ', ' ', 'k', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', ' '
     };
     int k = 0;
 
     for (int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
+            if(pieceList[k] == EMPTY){
+                board[i][j].rs.value = 0;
+            } else {
+                board[i][j].rs.value = 1;
+            }
             board[i][j].piece = pieceList[k];
             k++;
         }

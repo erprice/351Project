@@ -38,12 +38,9 @@ void printArray(int arr[], int size) {
 }
 
 int main(){
-    initChessboardForTesting();
-    displayBoard();
-    setRSValue(3,0,0);
-    gameUpdate();
-    sleep(1);
-    setRSValue(2,0,1);
-    gameUpdate();
-    displayBoard();
+    initChessboard();
+    while(1){
+        reedSwitchUpdate();
+        gameUpdate();
+    }
 }

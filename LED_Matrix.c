@@ -328,7 +328,7 @@ void displayDouble(double value){
 
 }
 
-void displayFromArr(int LED_Arr[]){
+void displayFromArr(const int LED_Arr[]){
     turnOffDisplay();
     turnOnDisplay();
     int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
