@@ -3,7 +3,16 @@
 
 //void gameThreadStart();
 
+typedef enum {
+    WAITING, //Waiting for piece to be picked up
+    PICKED_UP,
+    INVALID_PLACEMENT,
+    WRONG_TURN
+} STATE;
+
 void gameUpdate();
 
 void reedSwitchUpdate();
+
+STATE getState();
 #endif

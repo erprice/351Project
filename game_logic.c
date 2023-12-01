@@ -31,6 +31,10 @@ const int OFF[8*8] = {0};
 const int ON[8*8] = {[0 ... 63] = 1};
 
 //Runs one iteration of the game update() loop
+STATE getState(){
+    return state;
+}
+
 void gameUpdate(){
     switch (state){
     case WAITING:

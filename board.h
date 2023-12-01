@@ -27,6 +27,8 @@ int* getPossibleMoves(int x, int y);
 
 void displayBoard();
 
+void displayRSValues();
+
 int getIndex(int x, int y);
 
 int readReedSwitch(reedSwitch rs);

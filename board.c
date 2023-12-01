@@ -130,6 +130,16 @@ void displayBoard(){
     }
 }
 
+void displayRSValues(){
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++){
+            TILE tile = getTile(i, j);
+            printf("%d ", tile.rs.value);
+        }
+        printf("\n");
+    }
+}
+
 bool isPickedUp(TILE tile){
     if(tile.piece != EMPTY && readReedSwitch(tile.rs) == 0){
         return true;
