@@ -42,11 +42,14 @@ int main(){
     int x, y;
     while(1){
         displayRSValues();
+        printf("\n");
         displayBoard();
+        printf("-----");
         printf("X value: ");
         scanf("%d", &x);
         printf("Y value: ");
         scanf("%d", &y);
+        printf("\n");
         TILE tempTile = getTile(x, y);
         setRSValue(x, y, (!tempTile.rs.value));
         gameUpdate();
