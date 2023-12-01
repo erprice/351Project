@@ -11,6 +11,7 @@
 #define WHITE 0
 #define BLACK 1
 
+char* pointer = "0\n";
 
 static TILE board[BOARD_SIZE][BOARD_SIZE];
 
@@ -145,29 +146,40 @@ static reedSwitch initReedSwitch(int header_num, int pin_num){
     char path[100];
     configPin(header_num, pin_num, 0);
     sprintf(path, "/sys/class/gpio/gpio%d/value", getGPIO(header_num, pin_num));
-    rs.filePath = path;
-    printf(path);
-    rs.value = readIntFromFile(path);
+    rs.filePath = strdup(path);
+    printf(rs.filePath);
+    // rs.value = 0;
+    rs.value = readIntFromFile(rs.filePath);
+    printf("\n");
     return rs;
 }
 
-static int readIntFromFile(char* filePath){
+int readIntFromFile(char* filePath){
+
     FILE *pFile = fopen(filePath, "r");
-    int num;
+    //int num;
     if (pFile == NULL) {
         printf("ERROR: Unable to open file (%s) for read\n", filePath);
         exit(-1);
     }
+    char buff[100];
+    fgets(buff, 100, pFile);
+    fclose(pFile);
+    //printf(filePath);
+    return strcmp(buff, pointer);
 
+    /*
     if (fscanf(pFile, "%d", &num) == 1) {
         // Successfully read an integer from the file
         fclose(pFile);
+
         return num;
     } else {
         // Failed to read an integer
         fprintf(stderr, "Error reading integer from the file.\n");
         exit(-1);
     }
+    */
 }
 
 static int* getPossiblePawnMoves(int x, int y){
