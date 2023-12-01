@@ -482,11 +482,11 @@ static void placePieces3x3(){
 
 static void placePieces5x5(){
     char pieceList[5*5] = {
-        'Q', ' ', ' ', ' ', ' ',
+        'r', 'n', 'b', 'q', 'k',
+        'p', 'p', 'p', 'p', 'p',
         ' ', ' ', ' ', ' ', ' ',
-        ' ', ' ', 'k', ' ', ' ',
-        ' ', ' ', ' ', ' ', ' ',
-        ' ', ' ', ' ', ' ', ' '
+        'P', 'P', 'P', 'P', 'P',
+        'R', 'N', 'B', 'Q', 'K'
     };
     int k = 0;
 
