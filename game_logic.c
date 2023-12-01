@@ -12,7 +12,9 @@ typedef enum {
     WAITING, //Waiting for piece to be picked up
     PICKED_UP,
     INVALID_PLACEMENT,
-    WRONG_TURN
+    WRONG_TURN,
+    CHECK,
+    CHECKMATE
 } STATE;
 
 #define EMPTY ' '
