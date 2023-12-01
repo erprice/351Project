@@ -86,6 +86,7 @@ void gameUpdate(){
                         turn = !turn; //change turns
                         currentColour = !currentColour;
                         state = WAITING;
+                        reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
                         printf("INVALID PLACEMENT\n");                   
@@ -99,6 +100,7 @@ void gameUpdate(){
                         turn = !turn; //change turns
                         currentColour = !currentColour; //Change colour
                         state = WAITING;
+                        reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
                         printf("INVALID PLACEMENT\n");
@@ -106,6 +108,7 @@ void gameUpdate(){
                     }
                 } else if(i == currentX && j == currentY && currentTile.rs.value == 1){
                     state = WAITING;
+                    reset_Display();
                     //TODO: if placed back on its own tile
                 }
             }
@@ -118,6 +121,7 @@ void gameUpdate(){
         currentTile = getTile(currentX, currentY);
         if(currentTile.rs.value == 1){
             state = WAITING;
+            reset_Display();
         }
         break;
         }
