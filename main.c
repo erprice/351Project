@@ -39,8 +39,16 @@ void printArray(int arr[], int size) {
 
 int main(){
     initChessboard();
+    int x, y;
     while(1){
         displayRSValues();
-        reedSwitchUpdate();
+        displayBoard();
+        printf("X value: ");
+        scanf("%d", &x);
+        printf("Y value: ");
+        scanf("%d", &y);
+        TILE tempTile = getTile(x, y);
+        setRSValue(x, y, (!tempTile.rs.value));
+        gameUpdate();
     }
 }
