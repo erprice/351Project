@@ -13,6 +13,7 @@ typedef enum {
     PICKED_UP,
     INVALID_PLACEMENT,
     WRONG_TURN,
+    CAPTURING,
     CHECK,
     CHECKMATE
 } STATE;
@@ -31,6 +32,8 @@ int currentX;
 int currentY;
 int wrongX;
 int wrongY;
+int capturingX;
+int capturingY;
 
 const int OFF[8] = {[0 ... 7] = 0b00000000};
 const int ON[8*8] = {[0 ... 63] = 0b11111111};
@@ -82,7 +85,12 @@ void gameUpdate(){
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 TILE currentTile = getTile(i, j);
-                if(currentTile.piece == EMPTY && currentTile.rs.value == 1){
+                if(i == currentX && j == currentY && currentTile.rs.value == 1){
+                    printf("PLACED BACK DOWN");
+                    state = WAITING;
+                    reset_Display();
+                    //TODO: if placed back on its own tile
+                } else if(currentTile.piece == EMPTY && currentTile.rs.value == 1){
                     //Moving piece to empty tile
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
@@ -100,28 +108,42 @@ void gameUpdate(){
                         //Not valid placement
                     }
                 } else if (currentTile.piece != EMPTY && getColour(currentTile.piece) != currentColour && currentTile.rs.value == 0){
-                    //wait until it reads 1 again
-                    //Capturing a piece
-                    if(moveArr[getIndex(i, j)] == 1){
-                        movePiece(currentX, currentY, i, j);
-                        free(moveArr);
-                        turn = !turn; //change turns
-                        currentColour = !currentColour; //Change colour
-                        state = WAITING;
-                        reset_Display();
-                    } else {
-                        state = INVALID_PLACEMENT;
-                        printf("INVALID PLACEMENT\n");
-                        //Not valid placement
-                    }
-                } else if(i == currentX && j == currentY && currentTile.rs.value == 1){
-                    state = WAITING;
-                    reset_Display();
-                    //TODO: if placed back on its own tile
-                }
+                    state = CAPTURING;
+                    capturingX = i;
+                    capturingY = j;
+
+                    // //wait until it reads 1 again
+                    // //Capturing a piece
+                    // if(moveArr[getIndex(i, j)] == 1){
+                    //     movePiece(currentX, currentY, i, j);
+                    //     free(moveArr);
+                    //     turn = !turn; //change turns
+                    //     currentColour = !currentColour; //Change colour
+                    //     state = WAITING;
+                    //     reset_Display();
+                    // } else {
+                    //     state = INVALID_PLACEMENT;
+                    //     printf("INVALID PLACEMENT\n");
+                    //     //Not valid placement
+                    // }
+                } 
             }
         }
         break;
+    case CAPTURING:
+        {
+        TILE temp = getTile(capturingX, capturingY);
+        if(temp.rs.value == 1){
+            movePiece(currentX, currentY, capturingX, capturingY);
+            free(moveArr);
+            free(moveArr2);
+            turn = !turn;
+            currentColour = !currentColour;
+            state = WAITING;
+            reset_Display();
+        }
+        break;
+        }
     case WRONG_TURN:
         {
         TILE currentTile;
@@ -143,6 +165,8 @@ void gameUpdate(){
         }
         break;
         }
+    default:
+        exit(1);
     }
 }
 
