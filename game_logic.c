@@ -28,7 +28,7 @@ int* moveArr2;
 int currentX;
 int currentY;
 
-const int OFF[8*8] = {0};
+const int OFF[8] = {0};
 const int ON[8*8] = {[0 ... 63] = 1};
 
 //Runs one iteration of the game update() loop
@@ -39,7 +39,7 @@ STATE getState(){
 void gameUpdate(){
     switch (state){
     case WAITING:
-        turnOffDisplay(); //Turn off all leds
+        displayFromArr(OFF); //Turn off all leds
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
