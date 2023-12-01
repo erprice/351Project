@@ -3,7 +3,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#define BOARD_SIZE 3
+#define BOARD_SIZE 5
 
 typedef struct{
     int value;
@@ -44,6 +44,8 @@ void movePiece(int x, int y, int x2, int y2);
 int getColour(char c);
 
 TILE getTile(int x, int y);
+
+void setRSValue(int x, int y, int value);
 
 
 

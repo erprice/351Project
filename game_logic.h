@@ -3,7 +3,7 @@
 
 //void gameThreadStart();
 
-void gameFunction();
+void gameUpdate();
 
 void reedSwitchUpdate();
 #endif

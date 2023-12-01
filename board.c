@@ -141,6 +141,11 @@ bool isPlaced(TILE tile){
     }
 }
 
+
+void setRSValue(int x, int y, int value){
+    board[x][y].rs.value = value;
+}
+
 static reedSwitch initReedSwitch(int header_num, int pin_num){
     reedSwitch rs;
     char path[100];

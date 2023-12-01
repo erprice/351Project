@@ -39,6 +39,11 @@ void printArray(int arr[], int size) {
 
 int main(){
     initChessboardForTesting();
-    gameFunction();
-
+    displayBoard();
+    setRSValue(3,0,0);
+    gameUpdate();
+    sleep(1);
+    setRSValue(2,0,1);
+    gameUpdate();
+    displayBoard();
 }
