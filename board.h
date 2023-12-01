@@ -39,7 +39,7 @@ bool isPlaced(TILE tile);
 
 int* convertToLEDarray(int* array);
 
-int arrayToBinaryInteger(int* array);
+//int arrayToBinaryInteger(int* array);
 
 void movePiece(int x, int y, int x2, int y2);
 

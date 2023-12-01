@@ -24,6 +24,7 @@ TURN turn = WHITE_TURN;
 int currentColour = WHITE;
 STATE state = WAITING;
 int* moveArr;
+int* moveArr2;
 int currentX;
 int currentY;
 
@@ -38,7 +39,7 @@ STATE getState(){
 void gameUpdate(){
     switch (state){
     case WAITING:
-        displayFromArr(OFF); //Turn off all leds
+        turnOffDisplay(); //Turn off all leds
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
@@ -50,6 +51,7 @@ void gameUpdate(){
                     currentX = i;
                     currentY = j;
                     moveArr = getPossibleMoves(currentX, currentY);
+                    moveArr2 = convertToLEDarray(moveArr);
                     for (int g = 0; g < 64; ++g) {
                         printf("%d ", moveArr[g]);
                         if((g+1) % 8 == 0){
@@ -57,7 +59,7 @@ void gameUpdate(){
                         }
                     }
                     printf("\n");
-                    displayFromArr(moveArr);
+                    displayFromArr(moveArr2);
                     //light up LEDs
                     break;
                 } else if (currentTile.piece != EMPTY && getColour(currentTile.piece) != currentColour && currentTile.rs.value == 0){
