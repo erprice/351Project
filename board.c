@@ -461,9 +461,9 @@ static int* getPossibleKnightMoves(int x, int y){
 }
 static void placePieces3x3(){
     char pieceList[3*3] = {
-        'K', ' ', ' ',
-        ' ', ' ', ' ',
-        ' ', ' ', 'k'
+        'Q', ' ', ' ',
+        ' ', ' ', 'k',
+        ' ', ' ', ' '
     };
     int k = 0;
 
