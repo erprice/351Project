@@ -102,6 +102,7 @@ void gameUpdate(){
                         reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
+                        displayFromArr(ON);
                         wrongX = i;
                         wrongY = j;
                         printf("INVALID PLACEMENT\n");                   
