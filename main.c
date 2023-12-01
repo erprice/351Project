@@ -41,6 +41,7 @@ int main(){
     initChessboard();
     int x, y;
     while(1){
+        printf("%d", getState());
         displayRSValues();
         printf("\n");
         displayBoard();

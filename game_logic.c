@@ -50,6 +50,13 @@ void gameUpdate(){
                     currentX = i;
                     currentY = j;
                     moveArr = getPossibleMoves(currentX, currentY);
+                    for (int g = 0; g < 64; ++g) {
+                        printf("%d ", moveArr[g]);
+                        if(g % 8 == 0){
+                            printf("\n");
+                        }
+                    }
+                    printf("\n");
                     displayFromArr(moveArr);
                     //light up LEDs
                     break;
