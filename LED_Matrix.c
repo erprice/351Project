@@ -23,7 +23,7 @@ struct DigitInfo {
     unsigned char digit_bytes[7]; // holds hardcoded byte values 
 };
 
-
+/*
 static void runCommand(char* command)
 {
     // Execute the shell command (output into pipe)
@@ -44,6 +44,40 @@ static void runCommand(char* command)
         printf(" exit code: %d\n", exitCode);
     }
 }
+*/
+
+static void runCommand(char* command)
+{
+    // Execute the shell command (output into pipe)
+    FILE *pipe = popen(command, "r");
+    if (pipe == NULL) {
+        perror("Unable to open pipe for command");
+        return;
+    }
+
+    // Ignore output of the command; but consume it
+    // so we don't get an error when closing the pipe.
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+        // printf("--> %s", buffer); // Uncomment for debugging
+    }
+
+    // Check for errors in reading the file
+    if (ferror(pipe)) {
+        perror("Error reading from pipe");
+    }
+
+    // Get the exit code from the pipe; non-zero is an error:
+    int exitCode = WEXITSTATUS(pclose(pipe));
+    if (exitCode != 0) {
+        perror("Unable to execute command:");
+        printf(" command: %s\n", command);
+        printf(" exit code: %d\n", exitCode);
+    }
+}
+
+
+
 
 //initialize I2C Bus
 static int initI2cBus(char* bus, int address)
