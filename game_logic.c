@@ -14,6 +14,7 @@ typedef enum {
     INVALID_PLACEMENT,
     WRONG_TURN,
     CAPTURING,
+    INVALID_CAPTURE,
     CHECK,
     CHECKMATE
 } STATE;
@@ -135,6 +136,9 @@ void gameUpdate(){
                         capturingX = i;
                         capturingY = j;
                     } else {
+                        state = INVALID_CAPTURE;
+                        wrongX = i;
+                        wrongY = j;
                         printf("CANNOT CAPTURE THERE\n");
                         exit(1);
                     }
@@ -187,6 +191,16 @@ void gameUpdate(){
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         if(tile.rs.value == 0){
+            state = PICKED_UP;
+            displayFromArr(moveArr2);
+        }
+        break;
+        }
+    case INVALID_CAPTURE:
+        {
+        displayFromArr(ON);
+        TILE tile = getTile(wrongX, wrongY);
+        if(tile.rs.value == 1){
             state = PICKED_UP;
             displayFromArr(moveArr2);
         }
