@@ -44,6 +44,13 @@ STATE getState(){
 }
 
 void gameUpdate(){
+    if(turn == WHITE_TURN){
+        currentColour = WHITE;
+    } else if (turn == BLACK_TURN){
+        currentColour = BLACK;
+    } else {
+        exit(1);
+    }
     switch (state){
     case WAITING:
         reset_Display(); //Turn off all leds
@@ -60,13 +67,13 @@ void gameUpdate(){
                     currentY = j;
                     moveArr = getPossibleMoves(currentX, currentY);
                     moveArr2 = convertToLEDarray(moveArr);
-                    for (int g = 0; g < 64; ++g) {
-                        printf("%d ", moveArr[g]);
-                        if((g+1) % 8 == 0){
-                            printf("\n");
-                        }
-                    }
-                    printf("\n");
+                    // for (int g = 0; g < 64; ++g) {
+                    //     printf("%d ", moveArr[g]);
+                    //     if((g+1) % 8 == 0){
+                    //         printf("\n");
+                    //     }
+                    // }
+                    // printf("\n");
                     displayFromArr(moveArr2);
                     //light up LEDs
                     break;
@@ -97,7 +104,7 @@ void gameUpdate(){
 
                         free(moveArr);
                         turn = !turn; //change turns
-                        currentColour = !currentColour;
+                        //currentColour = !currentColour;
                         state = WAITING;
                         reset_Display();
                     } else {
@@ -139,7 +146,7 @@ void gameUpdate(){
             free(moveArr);
             free(moveArr2);
             turn = !turn;
-            currentColour = !currentColour;
+            //currentColour = !currentColour;
             state = WAITING;
             reset_Display();
         }

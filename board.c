@@ -12,6 +12,8 @@
 #define BLACK 1
 
 char* pointer = "0\n";
+static int whiteKingX, whiteKingY;
+static int blackKingX, blackKingY;
 
 static TILE board[BOARD_SIZE][BOARD_SIZE];
 
@@ -491,6 +493,10 @@ static void placePieces5x5(){
         'R', 'N', 'B', 'Q', 'K'
     };
     int k = 0;
+    whiteKingX = 4;
+    whiteKingY = 4;
+    blackKingX = 0;
+    blackKingY = 4;
 
     for (int i = 0; i < 5; i++){
         for(int j = 0; j < 5; j++){
@@ -581,6 +587,17 @@ void movePiece(int x, int y, int x2, int y2){
         exit(-1);
     }
     if(inBounds(x) && inBounds(y) && inBounds(x2) && inBounds(y2)){
+        if(toupper(board[x][y].piece) == KING){
+            if(getColour(board[x][y].piece) == WHITE){
+                whiteKingX = x2;
+                whiteKingY = y2;
+            } else if (getColour(board[x][y].piece) == BLACK){
+                blackKingX = x2;
+                blackKingY = y2;
+            } else {
+                exit(1);
+            }
+        }
         board[x2][y2].piece = board[x][y].piece;
         board[x][y].piece = EMPTY;
     } 
@@ -591,6 +608,22 @@ static bool inBounds(int n){
         return true;
     } else {
         return false;
+    }
+}
+
+int getKingX(int colour){
+    if(colour == WHITE){
+        return whiteKingX;
+    } else if (colour == BLACK) {
+        return blackKingX;
+    }
+}
+
+int getKingX(int colour){
+    if(colour == WHITE){
+        return whiteKingY;
+    } else if (colour == BLACK) {
+        return blackKingY;
     }
 }
 /*
