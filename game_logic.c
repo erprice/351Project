@@ -65,6 +65,12 @@ void gameUpdate(){
                     state = PICKED_UP;
                     currentX = i;
                     currentY = j;
+                    if(moveArr != NULL){
+                        free(moveArr);
+                    }
+                    if(moveArr2 != NULL){
+                        free(moveArr2);
+                    }
                     moveArr = getPossibleMoves(currentX, currentY);
                     moveArr2 = convertToLEDarray(moveArr);
                     // for (int g = 0; g < 64; ++g) {

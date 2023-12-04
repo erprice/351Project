@@ -44,8 +44,12 @@ int main(){
     //int* ledArr;
     reset_Display();
     while(1){
+        system("clear");
         reedSwitchUpdate();
+        displayRSValues();
         gameUpdate();
+        displayBoard();
+        printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
         printf("WHITE KING: (%d, %d)\nBLACK KING: (%d, %d)\n", getKingX(0), getKingY(0), getKingX(1), getKingY(1));
     }
     // while(1){
