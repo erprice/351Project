@@ -139,7 +139,7 @@ void gameUpdate(){
                         state = INVALID_CAPTURE;
                         wrongX = i;
                         wrongY = j;
-                        printf("CANNOT CAPTURE THERE\n");
+                        //printf("CANNOT CAPTURE THERE\n");
                         exit(1);
                     }
 
@@ -200,9 +200,13 @@ void gameUpdate(){
         {
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
-        if(tile.rs.value == 1){
+        TILE currentTile = getTile(currentX, currentY);
+        if(tile.rs.value == 1 && currentTile.rs.value == 0){
             state = PICKED_UP;
             displayFromArr(moveArr2);
+        } else if (tile.rs.value == 1 && currentTile.rs.value == 1){
+            state = WAITING;
+            displayFromArr(OFF);
         }
         break;
         }
