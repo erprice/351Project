@@ -67,9 +67,11 @@ void gameUpdate(){
                     currentY = j;
                     if(moveArr != NULL){
                         free(moveArr);
+                        moveArr = NULL;
                     }
                     if(moveArr2 != NULL){
                         free(moveArr2);
+                        moveArr2 = NULL;
                     }
                     moveArr = getPossibleMoves(currentX, currentY);
                     moveArr2 = convertToLEDarray(moveArr);
@@ -108,7 +110,7 @@ void gameUpdate(){
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
 
-                        free(moveArr);
+                        //free(moveArr);
                         turn = !turn; //change turns
                         //currentColour = !currentColour;
                         state = WAITING;
@@ -149,8 +151,8 @@ void gameUpdate(){
         TILE temp = getTile(capturingX, capturingY);
         if(temp.rs.value == 1){
             movePiece(currentX, currentY, capturingX, capturingY);
-            free(moveArr);
-            free(moveArr2);
+            //free(moveArr);
+            //free(moveArr2);
             turn = !turn;
             //currentColour = !currentColour;
             state = WAITING;
