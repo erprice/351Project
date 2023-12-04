@@ -55,8 +55,8 @@ void gameUpdate(){
     switch (state){
     case WAITING:
         printf("WAITING\n");
-        reset_Display(); //Turn off all leds
-        printf("RESET DISPLAY\n");
+        //reset_Display(); //Turn off all leds
+        //printf("RESET DISPLAY\n");
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
