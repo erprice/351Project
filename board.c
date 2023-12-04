@@ -465,11 +465,16 @@ static int* getPossibleKnightMoves(int x, int y){
 }
 static void placePieces3x3(){
     char pieceList[3*3] = {
-        'Q', ' ', ' ',
+        'K', ' ', ' ',
         ' ', ' ', 'k',
         ' ', ' ', ' '
     };
     int k = 0;
+
+    whiteKingX = 0;
+    whiteKingY = 0;
+    blackKingX = 1;
+    blackKingY = 2;
 
     for (int i = 0; i < 3; i++){
         for(int j = 0; j < 3; j++){
