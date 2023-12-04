@@ -619,7 +619,7 @@ int getKingX(int colour){
     }
 }
 
-int getKingX(int colour){
+int getKingY(int colour){
     if(colour == WHITE){
         return whiteKingY;
     } else if (colour == BLACK) {
