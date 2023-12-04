@@ -3,7 +3,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#define BOARD_SIZE 5
+#define BOARD_SIZE 3
 
 typedef struct{
     int value;
