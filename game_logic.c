@@ -54,6 +54,7 @@ void gameUpdate(){
     }
     switch (state){
     case WAITING:
+        printf("WAITING\n");
         reset_Display(); //Turn off all leds
         printf("RESET DISPLAY\n");
         //TODO: LEDs off
@@ -102,6 +103,7 @@ void gameUpdate(){
         }
         break;
     case PICKED_UP:
+        printf("PICKED_UP\n");
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 TILE currentTile = getTile(i, j);
@@ -162,6 +164,7 @@ void gameUpdate(){
         break;
     case CAPTURING:
         {
+        printf("CAPTURING\n");
         TILE temp = getTile(capturingX, capturingY);
         if(temp.rs.value == 1){
             movePiece(currentX, currentY, capturingX, capturingY);
@@ -176,6 +179,7 @@ void gameUpdate(){
         }
     case WRONG_TURN:
         {
+        printf("WRONG_TURN");
         TILE currentTile;
         //TODO: LIGHT UP ALL LEDS AS WARNING
         currentTile = getTile(currentX, currentY);
@@ -187,6 +191,7 @@ void gameUpdate(){
         }
     case INVALID_PLACEMENT:
         {
+        printf("INVALID_PLACEMENT");
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         if(tile.rs.value == 0){
