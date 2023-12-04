@@ -17,6 +17,8 @@
 
 #define NUMOFDIGITS 10
 
+int i2cFileDesc ;
+
 //struct to hold info for each digit
 struct DigitInfo {
     int digit;
@@ -124,7 +126,7 @@ static void sleepForMs(long long delayInMs)
 //resets the display to all zeros
 void reset_Display(){
     unsigned char init[] = {0b00000000,0b00000000,0b00000000,0b00000000,0b00000000,0b00000000,0b00000000, 0b00000000};
-    int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
+    // int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
     int j = 0;
     for (int i = 0x00; i <= 0x0f; i+=2) {
         writeI2cReg(i2cFileDesc, i, init[j++]);
@@ -278,10 +280,14 @@ static unsigned char mapBitsToLeds(unsigned char value){
     return rotateRight(value, 1);
 }
 
+void set_i2cFileDesc(){
+     i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
+}
+
 //prints integer to the display
 void displayInteger(int value){
 
-    int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
+    // int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
     unsigned char* digit_left = NULL;
     unsigned char* digit_right = NULL;
     if(value < 0 || value > 99){ //invalid input
@@ -327,7 +333,7 @@ void displayInteger(int value){
 
 //prints the double value to the display
 void displayDouble(double value){
-    int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
+    // int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
     unsigned char* digit_left = NULL;
     unsigned char* digit_right = NULL;
     if(value < 0.0 || value > 9.9){
@@ -365,7 +371,7 @@ void displayDouble(double value){
 void displayFromArr(const int LED_Arr[]){
     turnOffDisplay();
     turnOnDisplay();
-    int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
+    // int i2cFileDesc = initI2cBus(I2CDRV_LINUX_BUS1, I2C_DEVICE_ADDRESS);
     int j = 0;
     for(int i = 0x0E; i >= 0x00; i-=2){
         writeI2cReg(i2cFileDesc, i, mapBitsToLeds(LED_Arr[j]));
