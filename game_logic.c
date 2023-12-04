@@ -140,7 +140,6 @@ void gameUpdate(){
                         wrongX = i;
                         wrongY = j;
                         //printf("CANNOT CAPTURE THERE\n");
-                        exit(1);
                     }
 
                     // //wait until it reads 1 again
@@ -198,6 +197,7 @@ void gameUpdate(){
         }
     case INVALID_CAPTURE:
         {
+        printf("INVALID_CAPTURE\n");
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         TILE currentTile = getTile(currentX, currentY);
@@ -211,6 +211,7 @@ void gameUpdate(){
         break;
         }
     default:
+        printf("default");
         exit(1);
     }
 }
