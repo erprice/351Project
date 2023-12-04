@@ -616,6 +616,9 @@ int getKingX(int colour){
         return whiteKingX;
     } else if (colour == BLACK) {
         return blackKingX;
+    } else {
+        printf("ERROR");
+        exit(1);
     }
 }
 
@@ -624,6 +627,9 @@ int getKingY(int colour){
         return whiteKingY;
     } else if (colour == BLACK) {
         return blackKingY;
+    } else {
+        printf("ERROR");
+        exit(1);
     }
 }
 /*
