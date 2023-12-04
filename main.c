@@ -52,6 +52,7 @@ int main(){
         printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
         printf("WHITE KING: (%d, %d)\nBLACK KING: (%d, %d)\n", getKingX(0), getKingY(0), getKingX(1), getKingY(1));
     }
+    freeArrays();
     // while(1){
     //     printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
     //     displayRSValues();

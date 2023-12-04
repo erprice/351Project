@@ -26,8 +26,8 @@ typedef enum {
 TURN turn = WHITE_TURN;
 int currentColour = WHITE;
 STATE state = WAITING;
-int* moveArr;
-int* moveArr2;
+int* moveArr = NULL;
+int* moveArr2 = NULL;
 int currentX;
 int currentY;
 int wrongX;
@@ -192,5 +192,13 @@ void reedSwitchUpdate(){
             TILE currentTile = getTile(i, j);
             setRSValue(i, j, readReedSwitch(currentTile.rs));
         }
+    }
+}
+
+void freeArrays(){
+    if(moveArr != NULL){
+        free(moveArr);
+    } else if (moveArr2 != NULL){
+        free(moveArr2);
     }
 }

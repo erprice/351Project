@@ -15,4 +15,6 @@ void gameUpdate();
 void reedSwitchUpdate();
 
 STATE getState();
+
+void freeArrays();
 #endif
