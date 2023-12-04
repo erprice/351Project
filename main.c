@@ -42,18 +42,22 @@ int main(){
     int x, y;
     reset_Display();
     while(1){
-        printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
-        displayRSValues();
-        printf("\n");
-        displayBoard();
-        printf("-----\n");
-        printf("X value: ");
-        scanf("%d", &x);
-        printf("Y value: ");
-        scanf("%d", &y);
-        printf("\n");
-        TILE tempTile = getTile(x, y);
-        setRSValue(x, y, (!tempTile.rs.value));
+        reedSwitchUpdate();
         gameUpdate();
     }
+    // while(1){
+    //     printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
+    //     displayRSValues();
+    //     printf("\n");
+    //     displayBoard();
+    //     printf("-----\n");
+    //     printf("X value: ");
+    //     scanf("%d", &x);
+    //     printf("Y value: ");
+    //     scanf("%d", &y);
+    //     printf("\n");
+    //     TILE tempTile = getTile(x, y);
+    //     setRSValue(x, y, (!tempTile.rs.value));
+    //     gameUpdate();
+    // }
 }

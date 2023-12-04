@@ -52,6 +52,4 @@ void setRSValue(int x, int y, int value);
 
 
 
-
-
 #endif
