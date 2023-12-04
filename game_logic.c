@@ -105,6 +105,7 @@ void gameUpdate(){
             for(int j = 0; j < BOARD_SIZE; j++){
                 TILE currentTile = getTile(i, j);
                 if(i == currentX && j == currentY && currentTile.rs.value == 1){
+                    //IF PIECE IS PLACED BACK DOWN
                     printf("PLACED BACK DOWN");
                     state = WAITING;
                     reset_Display();
@@ -128,9 +129,15 @@ void gameUpdate(){
                         //Not valid placement
                     }
                 } else if (currentTile.piece != EMPTY && getColour(currentTile.piece) != currentColour && currentTile.rs.value == 0){
-                    state = CAPTURING;
-                    capturingX = i;
-                    capturingY = j;
+                    //Capturing piece
+                    if(moveArr[getIndex(i, j)] == 1){
+                        state = CAPTURING;
+                        capturingX = i;
+                        capturingY = j;
+                    } else {
+                        printf("CANNOT CAPTURE THERE\n");
+                        exit(1);
+                    }
 
                     // //wait until it reads 1 again
                     // //Capturing a piece
