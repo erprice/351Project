@@ -43,8 +43,7 @@ int main(){
     //int* moveArr;
     //int* ledArr;
     reset_Display();
-    int n = 0;
-    while(n < 100){
+    while(1){
         system("clear");
         reedSwitchUpdate();
         displayRSValues();
@@ -52,7 +51,6 @@ int main(){
         displayBoard();
         printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
         printf("WHITE KING: (%d, %d)\nBLACK KING: (%d, %d)\n", getKingX(0), getKingY(0), getKingX(1), getKingY(1));
-        n++;
     }
     freeArrays();
     // while(1){
