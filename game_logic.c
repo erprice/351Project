@@ -74,6 +74,10 @@ void gameUpdate(){
                         moveArr2 = NULL;
                     }
                     moveArr = getPossibleMoves(currentX, currentY);
+                    if(moveArr == NULL){
+                        printf("moveArr = NULL");
+                        exit(1);
+                    }
                     moveArr2 = convertToLEDarray(moveArr);
                     // for (int g = 0; g < 64; ++g) {
                     //     printf("%d ", moveArr[g]);
