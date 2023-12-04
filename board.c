@@ -42,6 +42,8 @@ static bool isEnemy(int x, int y, int colour);
 static bool isEmpty(int x, int y);
 static bool inBounds(int n);
 static void initArrToZero(int* arr, int size);
+int getKingX(int colour);
+int getKingY(int colour);
 
 void initChessboard(){
     int n = 0;

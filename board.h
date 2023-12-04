@@ -49,6 +49,9 @@ TILE getTile(int x, int y);
 
 void setRSValue(int x, int y, int value);
 
+int getKingX(int colour);
+int getKingY(int colour);
+
 
 
 

@@ -40,6 +40,8 @@ void printArray(int arr[], int size) {
 int main(){
     initChessboard();
     int x, y;
+    int* moveArr;
+    int* ledArr;
     reset_Display();
     while(1){
         reedSwitchUpdate();
