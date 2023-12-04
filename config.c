@@ -42,6 +42,10 @@ void configPin(int header_num, int pin_num, int in_or_out){
     // sleepForMs(300);
     sprintf(path, "echo %s > /sys/class/gpio/gpio%d/direction", inORoutStr, GPIO);
     runCommand(path);
+    char active_low[100];
+    sprintf(active_low, "echo 1 > /sys/class/gpio/gpio%d/active_low", GPIO);
+    runCommand(active_low);
+    printf(active_low);
     //echoStringToFile(path, inORoutStr);
     sleepForMs(300);
 }
