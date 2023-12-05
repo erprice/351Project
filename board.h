@@ -19,6 +19,8 @@ void initChessboard();
 
 void initChessboardForTesting();
 
+//bool checkForCheck(int size, TILE boardArr[size][size], int colour);
+
 //int readIntFromFile(char* filePath);
 
 //Returns an array of length 64, 0 = piece cannot move there, 1 = piece CAN move there.

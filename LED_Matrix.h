@@ -3,7 +3,8 @@
 
 
 void displayInteger(int value);
-//void displayDouble(double value);
+void displayDouble(double value);
+void set_i2cFileDesc();
 void turnOnDisplay();
 void turnOffDisplay();
 void displayFromArr(const int LED_Arr[]);

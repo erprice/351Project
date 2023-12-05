@@ -39,20 +39,14 @@ void printArray(int arr[], int size) {
 
 int main(){
     initChessboard();
-    //int x, y;
-    //int* moveArr;
-    //int* ledArr;
+    set_i2cFileDesc();
     reset_Display();
+    startThreads();
     while(1){
-        system("clear");
-        reedSwitchUpdate();
-        displayRSValues();
-        gameUpdate();
-        displayBoard();
-        printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
-        printf("WHITE KING: (%d, %d)\nBLACK KING: (%d, %d)\n", getKingX(0), getKingY(0), getKingX(1), getKingY(1));
+        //do nothing
     }
-    freeArrays();
+    stopThreads();
+    // stopThreads();
     // while(1){
     //     printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
     //     displayRSValues();

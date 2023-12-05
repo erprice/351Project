@@ -65,6 +65,32 @@ void initChessboard(){
     }
 }
 
+// bool checkForCheck(int size, TILE boardArr[size][size], int colour){
+//     int kingx, kingy;
+//     bool breakFlag;
+//     for(int i = 0; i < size; i++){
+//         for(int j = 0; j < size; j++){
+//             char currentPiece = boardArr[i][j].piece;
+//             if(toupper(currentPiece) == KING && getColour(boardArr[i]) == colour){
+//                 kingx = i;
+//                 kingy = j;
+//                 breakFlag = true;
+//                 break;
+//             }
+//         }
+//         if(breakFlag){
+//             break;
+//         }
+//     }
+
+//     for(int i = 0; i < size; i++){
+//         for(int j = 0; j < size; j++){
+//             char currentPiece = boardArr[i][j].piece;
+//             if()
+//         }
+//     }
+// }
+
 void initChessboardForTesting(){
     //Uppercase = WHITE, Lowercase = BLACK
     for(int i = 0; i < BOARD_SIZE; i++){

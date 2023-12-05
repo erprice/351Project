@@ -2,6 +2,13 @@
 #include "LED_Matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
+
+static pthread_t game_thread_id;
+static pthread_t reed_thread_id;
+static pthread_mutex_t game_mutex;
+static pthread_mutex_t reed_mutex;
+static bool FLAG_CANCEL = false;
 
 typedef enum {
     WHITE_TURN,
@@ -45,9 +52,13 @@ STATE getState(){
 }
 
 void gameUpdate(){
+    displayRSValues();
+    displayBoard();
     if(turn == WHITE_TURN){
+        printf("WHITE TURN\n");
         currentColour = WHITE;
     } else if (turn == BLACK_TURN){
+        printf("BLACK TURN\n");
         currentColour = BLACK;
     } else {
         exit(1);
@@ -179,7 +190,7 @@ void gameUpdate(){
         }
     case WRONG_TURN:
         {
-        printf("WRONG_TURN");
+        printf("WRONG_TURN\n");
         TILE currentTile;
         //TODO: LIGHT UP ALL LEDS AS WARNING
         currentTile = getTile(currentX, currentY);
@@ -191,7 +202,7 @@ void gameUpdate(){
         }
     case INVALID_PLACEMENT:
         {
-        printf("INVALID_PLACEMENT");
+        printf("INVALID_PLACEMENT\n");
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         if(tile.rs.value == 0){
@@ -216,7 +227,7 @@ void gameUpdate(){
         break;
         }
     default:
-        printf("default");
+        printf("default\n");
         exit(1);
     }
 }
@@ -236,4 +247,40 @@ void freeArrays(){
     } else if (moveArr2 != NULL){
         free(moveArr2);
     }
+}
+
+static void* gameFunction(void* arg){
+    while(1){
+        gameUpdate();
+        if(FLAG_CANCEL){
+            break;
+        }
+    }
+    freeArrays();
+    return NULL;
+}
+
+static void* reedFunction(void* arg){
+    while(1){
+        reedSwitchUpdate();
+        if(FLAG_CANCEL){
+            break;
+        }
+    }
+    return NULL;
+}
+
+void startThreads(void){
+    reset_Display();
+    pthread_create(&reed_thread_id, NULL, reedFunction, NULL);
+    pthread_mutex_init(&reed_mutex, NULL);
+    pthread_create(&game_thread_id, NULL, gameFunction, NULL);
+    pthread_mutex_init(&reed_mutex, NULL);
+}
+
+void stopThreads(void){
+    reset_Display();
+    FLAG_CANCEL = true;
+    pthread_mutex_destroy(&reed_mutex);
+    pthread_mutex_destroy(&game_mutex);
 }

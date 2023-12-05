@@ -1,7 +1,9 @@
 #ifndef GAME_LOGIC_H
 #define GAME_LOGIC_H
 
-//void gameThreadStart();
+void startThreads();
+
+void stopThreads();
 
 typedef enum {
     WAITING, //Waiting for piece to be picked up
