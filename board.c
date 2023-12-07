@@ -11,7 +11,7 @@
 #define WHITE 0
 #define BLACK 1
 
-char* pointer = "0\n";
+static char* pointer = "0\n";
 static int whiteKingX, whiteKingY;
 static int blackKingX, blackKingY;
 
@@ -76,6 +76,7 @@ int getKingX(int colour);
 int getKingY(int colour);
 
 void initChessboard(){
+    configPin(8, 42, 0);
     int n = 0;
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
