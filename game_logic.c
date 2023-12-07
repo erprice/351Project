@@ -347,6 +347,6 @@ void startThreads(void){
 void stopThreads(void){
     reset_Display();
     FLAG_CANCEL = true;
-    pthread_mutex_join(&reed_mutex);
-    pthread_mutex_join(&game_mutex);
+    pthread_mutex_destroy(&reed_mutex);
+    pthread_mutex_destroy(&game_mutex);
 }
