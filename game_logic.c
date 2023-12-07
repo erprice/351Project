@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <unistd.h>
+#include <string.h>
 
 static pthread_t game_thread_id;
 static pthread_t reed_thread_id;
 static pthread_mutex_t game_mutex;
 static pthread_mutex_t reed_mutex;
 static bool FLAG_CANCEL = false;
+void stopThreads(void);
 
 typedef enum {
     WHITE_TURN,
@@ -51,7 +54,26 @@ STATE getState(){
     return state;
 }
 
+int read_Button() //reads the value of the gpio pin by opening the file and comparing the read value with 0\n
+{
+    const int MAX_LENGTH1 = 1024;
+    const char* pointer1 = "0\n";
+    FILE * f = fopen("/sys/class/gpio/gpio75/value",  "r"); //open file
+    if (f == NULL) //if the file cannot be opened exit program and print error.
+    {
+        printf("ERROR: Unable to open file (%s) for read\n", "/sys/class/gpio/gpio75/value");
+        exit(-1);
+    }
+    sleep(.005);
+    char buff[MAX_LENGTH1];
+    fgets(buff, MAX_LENGTH1, f); //read content pin file
+    sleep(1.0050);
+    fclose(f); //close file
+    return strcmp(buff, pointer1); //if 0\n is read return 0 otherwise return 1 (gpio pin is active low so 0 = pressed)
+}
+
 void gameUpdate(){
+    system("clear");
     displayRSValues();
     displayBoard();
     if(turn == WHITE_TURN){
@@ -66,7 +88,7 @@ void gameUpdate(){
     switch (state){
     case WAITING:
         printf("WAITING\n");
-        //reset_Display(); //Turn off all leds
+        //Turn off all leds
         //printf("RESET DISPLAY\n");
         //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
@@ -191,6 +213,7 @@ void gameUpdate(){
     case WRONG_TURN:
         {
         printf("WRONG_TURN\n");
+        displayFromArr(ON);
         TILE currentTile;
         //TODO: LIGHT UP ALL LEDS AS WARNING
         currentTile = getTile(currentX, currentY);
