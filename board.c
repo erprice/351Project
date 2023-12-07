@@ -617,13 +617,21 @@ static void placePieces3x3(){
 }
 
 static void placePieces5x5(){
+    // char pieceList[5*5] = {
+    //     'r', 'n', 'b', 'q', 'k',
+    //     'p', 'p', 'p', 'p', 'p',
+    //     ' ', ' ', ' ', ' ', ' ',
+    //     'P', 'P', 'P', 'P', 'P',
+    //     'R', 'N', 'B', 'Q', 'K'
+    // };
     char pieceList[5*5] = {
-        'r', 'n', 'b', 'q', 'k',
-        'p', 'p', 'p', 'p', 'p',
         ' ', ' ', ' ', ' ', ' ',
-        'P', 'P', 'P', 'P', 'P',
-        'R', 'N', 'B', 'Q', 'K'
+        'k', ' ', ' ', ' ', ' ',
+        ' ', ' ', ' ', ' ', 'Q',
+        ' ', ' ', ' ', 'R', ' ',
+        ' ', ' ', ' ', ' ', 'K'
     };
+    
     int k = 0;
     whiteKingX = 4;
     whiteKingY = 4;
