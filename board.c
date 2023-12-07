@@ -149,6 +149,10 @@ static void copyBoard(TILE copyOfBoard[BOARD_SIZE][BOARD_SIZE], TILE originalBoa
     }
 }
 
+bool isInCheck(int colour){
+    return isKingInCheck(colour, board);
+}
+
 //Checks a board state and sees if 
 static bool isKingInCheck(int kingColour, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int kingX, kingY;

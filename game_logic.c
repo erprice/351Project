@@ -150,11 +150,12 @@ void gameUpdate(){
                     //Moving piece to empty tile
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
-
-                        //free(moveArr);
-                        turn = !turn; //change turns
-                        //currentColour = !currentColour;
-                        state = WAITING;
+                        if(isInCheck(!currentColour)){
+                            state = CHECK;
+                        } else {
+                            state = WAITING;
+                        }
+                        turn = !turn;
                         reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
@@ -249,6 +250,48 @@ void gameUpdate(){
         }
         break;
         }
+    case CHECK:
+        {
+        printf("CHECK\n");
+        bool isCheckMate = true;
+        int* tempMoves;
+        for(int i = 0; i < BOARD_SIZE; i++){
+            for(int j = 0; j < BOARD_SIZE; j++){
+                TILE currentTile = getTile(i, j);
+                if(currentTile.piece != EMPTY && getColour(currentTile.piece) == currentColour){
+                    tempMoves = getPossibleMoves(i, j);
+                    int numMoves = 0;
+                    for(int ii = 0; ii < BOARD_SIZE; ii++){
+                        for(int jj = 0; jj < BOARD_SIZE; jj++){
+                            if(tempMoves[getIndex(ii, jj)] == 1){
+                                numMoves++;
+                                if(numMoves > 1){
+                                    isCheckMate = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if(!isCheckMate){
+                            break;
+                        }
+                    }
+                    if(!isCheckMate){break;}
+                }
+                if(!isCheckMate){break;}
+            }
+            if(!isCheckMate){break;}
+        }
+        if(isCheckMate){
+            state = CHECKMATE;
+        } else {
+            state = WAITING;
+        }
+        break;
+        }
+    case CHECKMATE:
+        printf("CHECKMATE\n");
+        exit(1);
+        break;
     default:
         printf("default\n");
         exit(1);
