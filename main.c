@@ -56,6 +56,8 @@ void printArray(int arr[], int size) {
     }
     printf("\n");
 }
+#define ROW_ON 0b11111111
+#define ROW_OFF 0b00000000
 
 int main(){
     //configPin(8,42, 0);
@@ -66,6 +68,19 @@ int main(){
     while(1){
         //do nothing
     }
+    int array[] = {ROW_ON, ROW_OFF, ROW_OFF, ROW_OFF, ROW_OFF, ROW_OFF, ROW_OFF, ROW_OFF};
+    for(int i = 0; i < 5; i++){
+        displayFromArr(array);
+        array[i] = ROW_OFF;
+        array[++i] = ROW_ON;
+        sleep(0.5);
+    }
+    sleep(1);
+    reset_Display();
+    turnOffDisplay();
+
+
+
     // stopThreads();
     // while(1){
     //     printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
