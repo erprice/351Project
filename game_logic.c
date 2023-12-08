@@ -46,21 +46,21 @@ int wrongY;
 int capturingX;
 int capturingY;
 
-static int readIntFromFile(char* filePath){
-    static char* pointer = "0\n";
+// static int readIntFromFile(char* filePath){
+//     static char* pointer = "0\n";
 
-    FILE *pFile = fopen(filePath, "r");
-    //int num;
-    if (pFile == NULL) {
-        printf("ERROR: Unable to open file (%s) for read\n", filePath);
-        exit(-1);
-    }
-    char buff[100];
-    fgets(buff, 100, pFile);
-    fclose(pFile);
-    //printf(filePath);
-    return strcmp(buff, pointer);
-}
+//     FILE *pFile = fopen(filePath, "r");
+//     //int num;
+//     if (pFile == NULL) {
+//         printf("ERROR: Unable to open file (%s) for read\n", filePath);
+//         exit(-1);
+//     }
+//     char buff[100];
+//     fgets(buff, 100, pFile);
+//     fclose(pFile);
+//     //printf(filePath);
+//     return strcmp(buff, pointer);
+// }
 
 const int OFF[8] = {[0 ... 7] = 0b00000000};
 const int ON[8*8] = {[0 ... 63] = 0b11111111};
@@ -315,9 +315,9 @@ void gameUpdate(){
 }
 
 void reedSwitchUpdate(){
-    if(readIntFromFile("/sys/class/gpio/gpio75/value")){
-        stopThreads();
-    }
+    // if(readIntFromFile("/sys/class/gpio/gpio75/value")){
+    //     stopThreads();
+    // }
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             TILE currentTile = getTile(i, j);
