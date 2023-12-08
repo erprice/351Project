@@ -46,6 +46,22 @@ int wrongY;
 int capturingX;
 int capturingY;
 
+// static int readIntFromFile(char* filePath){
+//     static char* pointer = "0\n";
+
+//     FILE *pFile = fopen(filePath, "r");
+//     //int num;
+//     if (pFile == NULL) {
+//         printf("ERROR: Unable to open file (%s) for read\n", filePath);
+//         exit(-1);
+//     }
+//     char buff[100];
+//     fgets(buff, 100, pFile);
+//     fclose(pFile);
+//     //printf(filePath);
+//     return strcmp(buff, pointer);
+// }
+
 const int OFF[8] = {[0 ... 7] = 0b00000000};
 const int ON[8*8] = {[0 ... 63] = 0b11111111};
 
@@ -150,11 +166,12 @@ void gameUpdate(){
                     //Moving piece to empty tile
                     if(moveArr[getIndex(i, j)] == 1){
                         movePiece(currentX, currentY, i, j);
-
-                        //free(moveArr);
-                        turn = !turn; //change turns
-                        //currentColour = !currentColour;
-                        state = WAITING;
+                        if(isInCheck(!currentColour)){
+                            state = CHECK;
+                        } else {
+                            state = WAITING;
+                        }
+                        turn = !turn;
                         reset_Display();
                     } else {
                         state = INVALID_PLACEMENT;
@@ -249,6 +266,48 @@ void gameUpdate(){
         }
         break;
         }
+    case CHECK:
+        {
+        printf("CHECK\n");
+        bool isCheckMate = true;
+        int* tempMoves;
+        for(int i = 0; i < BOARD_SIZE; i++){
+            for(int j = 0; j < BOARD_SIZE; j++){
+                TILE currentTile = getTile(i, j);
+                if(currentTile.piece != EMPTY && getColour(currentTile.piece) == currentColour){
+                    tempMoves = getPossibleMoves(i, j);
+                    int numMoves = 0;
+                    for(int ii = 0; ii < BOARD_SIZE; ii++){
+                        for(int jj = 0; jj < BOARD_SIZE; jj++){
+                            if(tempMoves[getIndex(ii, jj)] == 1){
+                                numMoves++;
+                                if(numMoves > 1){
+                                    isCheckMate = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if(!isCheckMate){
+                            break;
+                        }
+                    }
+                    if(!isCheckMate){break;}
+                }
+                if(!isCheckMate){break;}
+            }
+            if(!isCheckMate){break;}
+        }
+        if(isCheckMate){
+            state = CHECKMATE;
+        } else {
+            state = WAITING;
+        }
+        break;
+        }
+    case CHECKMATE:
+        printf("CHECKMATE\n");
+        exit(1);
+        break;
     default:
         printf("default\n");
         exit(1);
@@ -256,6 +315,9 @@ void gameUpdate(){
 }
 
 void reedSwitchUpdate(){
+    // if(readIntFromFile("/sys/class/gpio/gpio75/value")){
+    //     stopThreads();
+    // }
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             TILE currentTile = getTile(i, j);
@@ -285,6 +347,7 @@ static void* gameFunction(void* arg){
 
 static void* reedFunction(void* arg){
     while(1){
+
         reedSwitchUpdate();
         if(FLAG_CANCEL){
             break;
@@ -306,4 +369,5 @@ void stopThreads(void){
     FLAG_CANCEL = true;
     pthread_mutex_destroy(&reed_mutex);
     pthread_mutex_destroy(&game_mutex);
+    exit(1);
 }
