@@ -306,6 +306,7 @@ void gameUpdate(){
         }
     case CHECKMATE:
         printf("CHECKMATE\n");
+        stopThreads();
         exit(1);
         break;
     default:
