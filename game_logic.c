@@ -316,9 +316,9 @@ void gameUpdate(){
 }
 
 void reedSwitchUpdate(){
-    // if(readIntFromFile("/sys/class/gpio/gpio75/value")){
-    //     stopThreads();
-    // }
+    if(readIntFromFile("/sys/class/gpio/gpio75/value")){
+        stopThreads();
+    }
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             TILE currentTile = getTile(i, j);
