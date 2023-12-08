@@ -58,7 +58,7 @@ void printArray(int arr[], int size) {
 }
 
 int main(){
-    //configPin(8,42, 0);
+    configPin(8,42, 0);
     initChessboard();
     set_i2cFileDesc();
     reset_Display();

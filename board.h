@@ -27,8 +27,6 @@ void initChessboardForTesting();
 //MUST call free on the returned array
 int* getPossibleMoves(int x, int y);
 
-bool isInCheck(int colour);
-
 void displayBoard();
 
 void displayRSValues();

@@ -11,7 +11,7 @@
 #define WHITE 0
 #define BLACK 1
 
-static char* pointer = "0\n";
+char* pointer = "0\n";
 static int whiteKingX, whiteKingY;
 static int blackKingX, blackKingY;
 
@@ -27,56 +27,27 @@ typedef enum {
     KING = 'K',
 } Piece;
 
-// static void print2DArray(int rows, int cols, int array[rows][cols]) {
-//     for (int i = 0; i < rows; i++) {
-//         for (int j = 0; j < cols; j++) {
-//             printf("%d ", array[i][j]);
-//         }
-//         printf("\n");
-//     }
-// }
-
-// static void printArrayInRows(const int* array, int size, int elementsPerRow) {
-//     for (int i = 0; i < size; i++) {
-//         printf("%d ", array[i]);
-
-//         // Check if it's time to start a new row
-//         if ((i + 1) % elementsPerRow == 0) {
-//             printf("\n");  // Move to the next line for a new row
-//         }
-//     }
-
-//     // Print a newline if the last row is incomplete
-//     if (size % elementsPerRow != 0) {
-//         printf("\n");
-//     }
-// }
-
 //helper functions
 static reedSwitch initReedSwitch(int header_num, int pin_num);
 static void placePieces5x5();
 static void placePieces3x3();
 static int readIntFromFile(char* filePath);
-static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleKnightMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleQueenMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleKingMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static bool isValid(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static int* getPossibleMovesWithNoCheck(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static bool isKingInCheck(int kingColour, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static void copyBoard(TILE copyOfBoard[BOARD_SIZE][BOARD_SIZE], TILE originalBoard[BOARD_SIZE][BOARD_SIZE]);
+static int* getPossiblePawnMoves(int x, int y);
+static int* getPossibleRookMoves(int x, int y);
+static int* getPossibleBishopMoves(int x, int y);
+static int* getPossibleKnightMoves(int x, int y);
+static int* getPossibleQueenMoves(int x, int y);
+static int* getPossibleKingMoves(int x, int y);
+static bool isValid(int x, int y, int colour);
 int getColour(char c);
-static bool isEnemy(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]);
-static bool isEmpty(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]);
+static bool isEnemy(int x, int y, int colour);
+static bool isEmpty(int x, int y);
 static bool inBounds(int n);
 static void initArrToZero(int* arr, int size);
 int getKingX(int colour);
 int getKingY(int colour);
 
 void initChessboard(){
-    configPin(8, 42, 0);
     int n = 0;
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -136,58 +107,7 @@ void initChessboardForTesting(){
     }
 }
 
-static void copyBoard(TILE copyOfBoard[BOARD_SIZE][BOARD_SIZE], TILE originalBoard[BOARD_SIZE][BOARD_SIZE]){
-    for(int i = 0; i < BOARD_SIZE; i++){
-        for(int j = 0; j < BOARD_SIZE; j++){
-            copyOfBoard[i][j].piece = originalBoard[i][j].piece;
-            if(copyOfBoard[i][j].piece == EMPTY){
-                printf("0 ");
-            } else {
-                printf("%c ", copyOfBoard[i][j].piece);
-            }
-        }
-        printf("\n");
-    }
-}
-
-bool isInCheck(int colour){
-    return isKingInCheck(colour, board);
-}
-
-//Checks a board state and sees if 
-static bool isKingInCheck(int kingColour, TILE board[BOARD_SIZE][BOARD_SIZE]){
-    int kingX, kingY;
-    bool foundKing = false;
-    for(int i = 0; i < BOARD_SIZE; i++){
-        for(int j = 0; j < BOARD_SIZE; j++){
-            if(board[i][j].piece != EMPTY && getColour(board[i][j].piece) == kingColour && toupper(board[i][j].piece) == KING){
-                kingX = i;
-                kingY = j;
-                foundKing = true;
-                break;
-            }
-        }
-        if(foundKing){
-            break;
-        }
-    }
-    int* moves;
-    for(int i = 0; i < BOARD_SIZE; i++){
-        for(int j = 0; j < BOARD_SIZE; j++){
-            char currentPiece = board[i][j].piece;
-            if(currentPiece != EMPTY && getColour(currentPiece) != kingColour){
-                moves = getPossibleMovesWithNoCheck(i, j, board);
-                if(moves[getIndex(kingX, kingY)] == 1){
-                    return true;
-                }
-                free(moves);
-            }
-        }
-    }
-    return false;
-}
-
-static int* getPossibleMovesWithNoCheck(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+int* getPossibleMoves(int x, int y){
     if(x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE){
         printf("ERROR: INDEX IS OUT OF BOUNDS");
         exit(-1);
@@ -199,50 +119,28 @@ static int* getPossibleMovesWithNoCheck(int x, int y, TILE board[BOARD_SIZE][BOA
         exit(-1);
         break;
     case PAWN:
-        return getPossiblePawnMoves(x,y, board);
+        return getPossiblePawnMoves(x,y);
         break;
     case ROOK:
-        return getPossibleRookMoves(x,y, board);
+        return getPossibleRookMoves(x,y);
         break;
     case BISHOP:
-        return getPossibleBishopMoves(x,y, board);
+        return getPossibleBishopMoves(x,y);
         break;
     case KNIGHT:
-        return getPossibleKnightMoves(x,y, board);
+        return getPossibleKnightMoves(x,y);
         break;
     case QUEEN:
-        return getPossibleQueenMoves(x,y, board);
+        return getPossibleQueenMoves(x,y);
         break;
     case KING:
-        return getPossibleKingMoves(x,y, board);
+        return getPossibleKingMoves(x,y);
         break;
     default:
         printf("ERROR: SOMETHING WRONG");
         exit(-1);
         break;
     }
-}
-
-int* getPossibleMoves(int x, int y){
-    int* moves = getPossibleMovesWithNoCheck(x, y, board);
-    int colour = getColour(board[x][y].piece);
-    TILE boardCopy[BOARD_SIZE][BOARD_SIZE];
-    copyBoard(boardCopy, board);
-    for(int i = 0; i < BOARD_SIZE; i++){
-        for(int j = 0; j < BOARD_SIZE; j++){
-            if(!(i == x && j == y) && moves[getIndex(i, j)] == 1){
-                char tempPiece = boardCopy[i][j].piece;
-                boardCopy[i][j].piece = boardCopy[x][y].piece;
-                boardCopy[x][y].piece = EMPTY;
-                if(isKingInCheck(colour, boardCopy)){
-                    moves[getIndex(i, j)] = 0;
-                }
-                boardCopy[x][y].piece = boardCopy[i][j].piece;
-                boardCopy[i][j].piece = tempPiece;
-            }
-        }
-    }
-    return moves;
 }
 
 int readReedSwitch(reedSwitch rs){
@@ -334,7 +232,7 @@ static int readIntFromFile(char* filePath){
     */
 }
 
-static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossiblePawnMoves(int x, int y){
     int pawnColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int)); //8x8 for LED Matrix
     initArrToZero(result, 64);
@@ -381,41 +279,41 @@ static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     return result;
 }
 
-static int* getPossibleKingMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossibleKingMoves(int x, int y){
     int kingColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int)); //8x8 for LED Matrix
     initArrToZero(result, 64);
     result[getIndex(x,y)] = 1;
     //Up
-    if(isValid(x-1,y, kingColour, board)){
+    if(isValid(x-1,y, kingColour)){
         result[getIndex(x-1,y)] = 1;
     }
     //Down
-    if(isValid(x + 1, y, kingColour, board)){
+    if(isValid(x + 1, y, kingColour)){
         result[getIndex(x+1,y)] = 1;
     }
     //Left
-    if(isValid(x,y-1, kingColour, board)){
+    if(isValid(x,y-1, kingColour)){
         result[getIndex(x,y-1)] = 1;
     }
     //Right
-    if(isValid(x,y+1, kingColour, board)){
+    if(isValid(x,y+1, kingColour)){
         result[getIndex(x,y+1)] = 1;
     }
     //Up/left
-    if(isValid(x-1,y-1, kingColour, board)){
+    if(isValid(x-1,y-1, kingColour)){
         result[getIndex(x-1,y-1)] = 1;
     }
     //Up/Right
-    if(isValid(x-1,y+1, kingColour, board)){
+    if(isValid(x-1,y+1, kingColour)){
         result[getIndex(x-1,y+1)] = 1;
     }
     //Down/Left
-    if(isValid(x+1,y-1, kingColour, board)){
+    if(isValid(x+1,y-1, kingColour)){
         result[getIndex(x+1,y-1)] = 1;
     }
     //Down/Right
-    if(isValid(x+1,y+1, kingColour, board)){
+    if(isValid(x+1,y+1, kingColour)){
         result[getIndex(x+1,y+1)] = 1;
     }
     
@@ -428,7 +326,7 @@ static void initArrToZero(int* arr, int size){
     }
 }
 
-static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossibleRookMoves(int x, int y){
     int rookColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
     initArrToZero(result, 64);
@@ -436,9 +334,9 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     //check where it can move to the right
 
     for(int right_y = y+1; right_y < BOARD_SIZE; right_y++){
-        if(isEmpty(x, right_y, board)){
+        if(isEmpty(x, right_y)){
             result[getIndex(x,right_y)] = 1;
-        } else if (isEnemy(x, right_y, rookColour, board)){
+        } else if (isEnemy(x, right_y, rookColour)){
             result[getIndex(x, right_y)] = 1;
             break;
         } else {
@@ -448,9 +346,9 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
 
     //check where it can move to the left
     for(int left_y = y-1; left_y >= 0; left_y--){
-        if(isEmpty(x, left_y, board)){
+        if(isEmpty(x, left_y)){
             result[getIndex(x,left_y)] = 1;
-        } else if (isEnemy(x, left_y, rookColour, board)){
+        } else if (isEnemy(x, left_y, rookColour)){
             result[getIndex(x, left_y)] = 1;
             break;
         } else {
@@ -460,9 +358,9 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
 
     //check where it can move up
     for(int up_x = x-1; up_x >= 0; up_x--){
-        if(isEmpty(up_x, y, board)){
+        if(isEmpty(up_x, y)){
             result[getIndex(up_x,y)] = 1;
-        } else if (isEnemy(up_x, y, rookColour, board)){
+        } else if (isEnemy(up_x, y, rookColour)){
             result[getIndex(up_x, y)] = 1;
             break;
         } else {
@@ -472,9 +370,9 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
 
     //check where it can move down
     for(int down_x = x+1; down_x < BOARD_SIZE; down_x++){
-        if(isEmpty(down_x, y, board)){
+        if(isEmpty(down_x, y)){
             result[getIndex(down_x,y)] = 1;
-        } else if (isEnemy(down_x, y, rookColour, board)){
+        } else if (isEnemy(down_x, y, rookColour)){
             result[getIndex(down_x, y)] = 1;
             break;
         } else {
@@ -484,7 +382,7 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     return result;
 }
 
-static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossibleBishopMoves(int x, int y){
     int bishopColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
     initArrToZero(result, 64);
@@ -492,9 +390,9 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
     int i,j;
     //check the NE diagonal
     for(i = x-1, j = y+1; i >= 0 && j < BOARD_SIZE; i--, j++){
-        if(isEmpty(i,j, board)){
+        if(isEmpty(i,j)){
             result[getIndex(i,j)] = 1;
-        } else if (isEnemy(i,j, bishopColour, board)){
+        } else if (isEnemy(i,j, bishopColour)){
             result[getIndex(i,j)] = 1;
             break;
         } else {
@@ -504,9 +402,9 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
 
     //check the NW diagonal
     for(i = x-1, j = y-1; i >= 0 && j >= 0; i--, j--){
-        if(isEmpty(i,j, board)){
+        if(isEmpty(i,j)){
             result[getIndex(i,j)] = 1;
-        } else if (isEnemy(i,j, bishopColour, board)){
+        } else if (isEnemy(i,j, bishopColour)){
             result[getIndex(i,j)] = 1;
             break;
         } else {
@@ -516,9 +414,9 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
 
     //check the SE diagonal
     for(i = x+1, j = y+1; i < BOARD_SIZE && j < BOARD_SIZE; i++, j++){
-        if(isEmpty(i,j, board)){
+        if(isEmpty(i,j)){
             result[getIndex(i,j)] = 1;
-        } else if (isEnemy(i,j, bishopColour, board)){
+        } else if (isEnemy(i,j, bishopColour)){
             result[getIndex(i,j)] = 1;
             break;
         } else {
@@ -528,9 +426,9 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
 
     //check the SW diagonal
     for(i = x+1, j = y-1; i < BOARD_SIZE && j >= 0; i++, j--){
-        if(isEmpty(i,j, board)){
+        if(isEmpty(i,j)){
             result[getIndex(i,j)] = 1;
-        } else if (isEnemy(i,j, bishopColour, board)){
+        } else if (isEnemy(i,j, bishopColour)){
             result[getIndex(i,j)] = 1;
             break;
         } else {
@@ -541,11 +439,11 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
     return result;
 }
 
-static int* getPossibleQueenMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossibleQueenMoves(int x, int y){
     int* combinedArray = (int*)malloc(8 * 8 * sizeof(int));
     initArrToZero(combinedArray, 64);
-    int* bishopArray = getPossibleBishopMoves(x,y, board);
-    int* rookArray = getPossibleRookMoves(x,y, board);
+    int* bishopArray = getPossibleBishopMoves(x,y);
+    int* rookArray = getPossibleRookMoves(x,y);
 
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -559,34 +457,34 @@ static int* getPossibleQueenMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZ
     return combinedArray;
 }
 
-static int* getPossibleKnightMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static int* getPossibleKnightMoves(int x, int y){
     int knightColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
     initArrToZero(result, 64);
     result[getIndex(x,y)] = 1;
 
-    if(isValid(x-1, y-2, knightColour, board)){
+    if(isValid(x-1, y-2, knightColour)){
         result[getIndex(x-1, y-2)] = 1;
     }
-    if(isValid(x-1, y+2, knightColour, board)){
+    if(isValid(x-1, y+2, knightColour)){
         result[getIndex(x-1,y+2)] = 1;
     }
-    if(isValid(x-2,y-1,knightColour, board)){
+    if(isValid(x-2,y-1,knightColour)){
         result[getIndex(x-2,y-1)] = 1;
     }
-    if(isValid(x-2,y+1,knightColour, board)){
+    if(isValid(x-2,y+1,knightColour)){
         result[getIndex(x-2,y+1)] = 1;
     }
-    if(isValid(x+1,y-2,knightColour, board)){
+    if(isValid(x+1,y-2,knightColour)){
         result[getIndex(x+1,y-2)] = 1;
     }
-    if(isValid(x+1,y+2,knightColour, board)){
+    if(isValid(x+1,y+2,knightColour)){
         result[getIndex(x+1,y+2)] = 1;
     }
-    if(isValid(x+2,y-1,knightColour, board)){
+    if(isValid(x+2,y-1,knightColour)){
         result[getIndex(x+2,y-1)] = 1;
     }
-    if(isValid(x+2,y+1,knightColour, board)){
+    if(isValid(x+2,y+1,knightColour)){
         result[getIndex(x+2,y+1)] = 1;
     }
     return result;
@@ -625,14 +523,6 @@ static void placePieces5x5(){
         'P', 'P', 'P', 'P', 'P',
         'R', 'N', 'B', 'Q', 'K'
     };
-    // char pieceList[5*5] = {
-    //     ' ', ' ', ' ', ' ', ' ',
-    //     'k', ' ', ' ', ' ', ' ',
-    //     ' ', ' ', ' ', ' ', 'Q',
-    //     ' ', ' ', ' ', 'R', ' ',
-    //     ' ', ' ', ' ', ' ', 'K'
-    // };
-    
     int k = 0;
     whiteKingX = 4;
     whiteKingY = 4;
@@ -650,10 +540,9 @@ static void placePieces5x5(){
             k++;
         }
     }
-    displayBoard();
 }
 
-static bool isValid(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static bool isValid(int x, int y, int colour){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
     } else if (board[x][y].piece == EMPTY){
@@ -665,7 +554,7 @@ static bool isValid(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]
     }
 }
 
-static bool isEmpty(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static bool isEmpty(int x, int y){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
     } else if (board[x][y].piece == EMPTY){
@@ -675,7 +564,7 @@ static bool isEmpty(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     }
 }
 
-static bool isEnemy(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]){
+static bool isEnemy(int x, int y, int colour){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
     } else if (getColour(board[x][y].piece) != colour){
@@ -689,8 +578,7 @@ int getColour(char c){
     //Uppercase = WHITE, Lowercase = BLACK 
     char capsC = toupper(c);
     if(capsC != PAWN && capsC != ROOK && capsC != BISHOP && capsC != QUEEN && capsC != KNIGHT && capsC != KING){
-        printf("WARNING: getColour called on non-piece: %c\n", c);
-        exit(-1);
+        printf("WARNING: getColour called on non-piece");
     }
     if(islower(c)){
         return BLACK;
