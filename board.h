@@ -15,15 +15,10 @@ typedef struct{
     reedSwitch rs; // 1
 }TILE;
 
-void initChessboard();
+void initChessboard(); //initialize the board
 
-void initChessboardForTesting();
+void initChessboardForTesting(); //to test the software without the BBG
 
-//bool checkForCheck(int size, TILE boardArr[size][size], int colour);
-
-//int readIntFromFile(char* filePath);
-
-//Returns an array of length 64, 0 = piece cannot move there, 1 = piece CAN move there.
 //MUST call free on the returned array
 int* getPossibleMoves(int x, int y);
 
@@ -31,30 +26,28 @@ bool isInCheck(int colour);
 
 void displayBoard();
 
-void displayRSValues();
+void displayRSValues(); //display the sensor values in 2D format
 
-int getIndex(int x, int y);
+int getIndex(int x, int y); //given the coordinates, returns the 1D array index
 
-int readReedSwitch(reedSwitch rs);
+int readReedSwitch(reedSwitch rs); //reads the value of the sensor
 
-bool isPickedUp(TILE tile);
+bool isPickedUp(TILE tile); //checks if the piece is picked up
 
-bool isPlaced(TILE tile);
+bool isPlaced(TILE tile); //checks if the piece is placed down on the board
 
-int* convertToLEDarray(int* array);
+int* convertToLEDarray(int* array); //generates the LED array to display on the board
 
-//int arrayToBinaryInteger(int* array);
+void movePiece(int x, int y, int x2, int y2); //move a piece to a certain tile
 
-void movePiece(int x, int y, int x2, int y2);
+int getColour(char c); //gets color of the piece
 
-int getColour(char c);
+TILE getTile(int x, int y); //returns the tile given the coordinates
 
-TILE getTile(int x, int y);
+void setRSValue(int x, int y, int value); //set sensor values manually for testing
 
-void setRSValue(int x, int y, int value);
-
-int getKingX(int colour);
-int getKingY(int colour);
+int getKingX(int colour); //gets the King's x coordinate
+int getKingY(int colour); //gets the King's y coordinate
 
 
 

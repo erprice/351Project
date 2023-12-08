@@ -9,8 +9,6 @@
 
 //Helper functions
 static void runCommand(char* command);
-//static void echoNumToFile(char* filePath, int num);
-//static void echoStringToFile(char* filePath, const char* str);
 static void sleepForMs(long long delayInMs);
 
 void configManyPins(struct Pin pinArray[], int size, int in_or_out){

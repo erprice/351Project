@@ -27,30 +27,6 @@ typedef enum {
     KING = 'K',
 } Piece;
 
-// static void print2DArray(int rows, int cols, int array[rows][cols]) {
-//     for (int i = 0; i < rows; i++) {
-//         for (int j = 0; j < cols; j++) {
-//             printf("%d ", array[i][j]);
-//         }
-//         printf("\n");
-//     }
-// }
-
-// static void printArrayInRows(const int* array, int size, int elementsPerRow) {
-//     for (int i = 0; i < size; i++) {
-//         printf("%d ", array[i]);
-
-//         // Check if it's time to start a new row
-//         if ((i + 1) % elementsPerRow == 0) {
-//             printf("\n");  // Move to the next line for a new row
-//         }
-//     }
-
-//     // Print a newline if the last row is incomplete
-//     if (size % elementsPerRow != 0) {
-//         printf("\n");
-//     }
-// }
 
 //helper functions
 static reedSwitch initReedSwitch(int header_num, int pin_num);
@@ -75,8 +51,9 @@ static void initArrToZero(int* arr, int size);
 int getKingX(int colour);
 int getKingY(int colour);
 
+//initialize the board
 void initChessboard(){
-    configPin(8, 42, 0);
+    configPin(8, 42, 0); //configure reset button
     int n = 0;
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -94,32 +71,7 @@ void initChessboard(){
     }
 }
 
-// bool checkForCheck(int size, TILE boardArr[size][size], int colour){
-//     int kingx, kingy;
-//     bool breakFlag;
-//     for(int i = 0; i < size; i++){
-//         for(int j = 0; j < size; j++){
-//             char currentPiece = boardArr[i][j].piece;
-//             if(toupper(currentPiece) == KING && getColour(boardArr[i]) == colour){
-//                 kingx = i;
-//                 kingy = j;
-//                 breakFlag = true;
-//                 break;
-//             }
-//         }
-//         if(breakFlag){
-//             break;
-//         }
-//     }
-
-//     for(int i = 0; i < size; i++){
-//         for(int j = 0; j < size; j++){
-//             char currentPiece = boardArr[i][j].piece;
-//             if()
-//         }
-//     }
-// }
-
+//to test the prototype version conveniently
 void initChessboardForTesting(){
     //Uppercase = WHITE, Lowercase = BLACK
     for(int i = 0; i < BOARD_SIZE; i++){
@@ -136,6 +88,7 @@ void initChessboardForTesting(){
     }
 }
 
+//makes a copy of the chessboard
 static void copyBoard(TILE copyOfBoard[BOARD_SIZE][BOARD_SIZE], TILE originalBoard[BOARD_SIZE][BOARD_SIZE]){
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -150,11 +103,12 @@ static void copyBoard(TILE copyOfBoard[BOARD_SIZE][BOARD_SIZE], TILE originalBoa
     }
 }
 
+//cheks if the king is in check
 bool isInCheck(int colour){
     return isKingInCheck(colour, board);
 }
 
-//Checks a board state and sees if 
+//Checks a board state and sees if the king is in check
 static bool isKingInCheck(int kingColour, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int kingX, kingY;
     bool foundKing = false;
@@ -180,7 +134,7 @@ static bool isKingInCheck(int kingColour, TILE board[BOARD_SIZE][BOARD_SIZE]){
                 if(moves[getIndex(kingX, kingY)] == 1){
                     return true;
                 }
-                free(moves);
+                free(moves); //deallocate dynamic memory
             }
         }
     }
@@ -245,10 +199,12 @@ int* getPossibleMoves(int x, int y){
     return moves;
 }
 
+//reads the value of the sensor
 int readReedSwitch(reedSwitch rs){
     return readIntFromFile(rs.filePath);
 }
 
+//display the board in 2D format
 void displayBoard(){
     for (int i = 0; i < BOARD_SIZE; i++) {
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -262,6 +218,7 @@ void displayBoard(){
     }
 }
 
+//display the sensor values in 2D format
 void displayRSValues(){
     for (int i = 0; i < BOARD_SIZE; i++) {
         for(int j = 0; j < BOARD_SIZE; j++){
@@ -272,6 +229,7 @@ void displayRSValues(){
     }
 }
 
+//checks if the piece is picked up
 bool isPickedUp(TILE tile){
     if(tile.piece != EMPTY && readReedSwitch(tile.rs) == 0){
         return true;
@@ -280,6 +238,7 @@ bool isPickedUp(TILE tile){
     }
 }
 
+//checks if the piece is placed down on the board
 bool isPlaced(TILE tile){
     if(tile.piece == EMPTY && readReedSwitch(tile.rs) == 1){
         return true;
@@ -288,11 +247,12 @@ bool isPlaced(TILE tile){
     }
 }
 
-
+//sets sensor values manually for testing
 void setRSValue(int x, int y, int value){
     board[x][y].rs.value = value;
 }
 
+//initialize the sensors
 static reedSwitch initReedSwitch(int header_num, int pin_num){
     reedSwitch rs;
     char path[100];
@@ -300,12 +260,12 @@ static reedSwitch initReedSwitch(int header_num, int pin_num){
     sprintf(path, "/sys/class/gpio/gpio%d/value", getGPIO(header_num, pin_num));
     rs.filePath = strdup(path);
     printf(rs.filePath);
-    // rs.value = 0;
     rs.value = readIntFromFile(rs.filePath);
     printf("\n");
     return rs;
 }
 
+//read integer from the given file
 static int readIntFromFile(char* filePath){
 
     FILE *pFile = fopen(filePath, "r");
@@ -317,23 +277,11 @@ static int readIntFromFile(char* filePath){
     char buff[100];
     fgets(buff, 100, pFile);
     fclose(pFile);
-    //printf(filePath);
     return strcmp(buff, pointer);
 
-    /*
-    if (fscanf(pFile, "%d", &num) == 1) {
-        // Successfully read an integer from the file
-        fclose(pFile);
-
-        return num;
-    } else {
-        // Failed to read an integer
-        fprintf(stderr, "Error reading integer from the file.\n");
-        exit(-1);
-    }
-    */
 }
 
+//get the possible moves of pawn
 static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int pawnColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int)); //8x8 for LED Matrix
@@ -367,11 +315,6 @@ static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
             if(y-1 >= 0 && board[x+1][y-1].piece != EMPTY && getColour(board[x+1][y-1].piece) == WHITE){
                 result[getIndex(x+1,y-1)] = 1;
             }
-            //Check SE tile
-            //printf("%d\n", board[x+1][y+1].piece);
-            //printf("%d\n", getColour(board[x+1][y+1].piece));
-            //printf("%d\n", getColour(board[x+1][y+1].piece) == WHITE);
-            //(y+1 < BOARD_SIZE && board[x+1][y+1].piece != EMPTY && getColour(board[x+1][y+1].piece == WHITE));
             if(y+1 < BOARD_SIZE && board[x+1][y+1].piece != EMPTY && getColour(board[x+1][y+1].piece) == WHITE){
                 result[getIndex(x+1,y+1)] = 1;
             }
@@ -381,6 +324,7 @@ static int* getPossiblePawnMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     return result;
 }
 
+//get the possible moves of king
 static int* getPossibleKingMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int kingColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int)); //8x8 for LED Matrix
@@ -422,12 +366,14 @@ static int* getPossibleKingMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     return result;
 }
 
+//initialize the passed array to all 0s
 static void initArrToZero(int* arr, int size){
     for(int i = 0; i < size; i++){
         arr[i] = 0;
     }
 }
 
+//get the possible moves of rook
 static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int rookColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
@@ -484,6 +430,7 @@ static int* getPossibleRookMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE
     return result;
 }
 
+//get the possible moves of bishop
 static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int bishopColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
@@ -541,6 +488,7 @@ static int* getPossibleBishopMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
     return result;
 }
 
+//get the possible moves of queen
 static int* getPossibleQueenMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int* combinedArray = (int*)malloc(8 * 8 * sizeof(int));
     initArrToZero(combinedArray, 64);
@@ -554,11 +502,13 @@ static int* getPossibleQueenMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZ
         }
     }
 
+    //free dynamically allocate arrays
     free(bishopArray);
     free(rookArray);
     return combinedArray;
 }
 
+//get the possible moves of knight
 static int* getPossibleKnightMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     int knightColour = getColour(board[x][y].piece); //black = 1, white = 0
     int* result = (int*)malloc(8 * 8 * sizeof(int));
@@ -591,6 +541,8 @@ static int* getPossibleKnightMoves(int x, int y, TILE board[BOARD_SIZE][BOARD_SI
     }
     return result;
 }
+
+//manually places pieces for testing in a 3 x 3 board
 static void placePieces3x3(){
     char pieceList[3*3] = {
         'K', ' ', ' ',
@@ -617,6 +569,7 @@ static void placePieces3x3(){
     }
 }
 
+//initialize pieces in a 5 x 5 board
 static void placePieces5x5(){
     char pieceList[5*5] = {
         'r', 'n', 'b', 'q', 'k',
@@ -625,13 +578,6 @@ static void placePieces5x5(){
         'P', 'P', 'P', 'P', 'P',
         'R', 'N', 'B', 'Q', 'K'
     };
-    // char pieceList[5*5] = {
-    //     ' ', ' ', ' ', ' ', ' ',
-    //     'k', ' ', ' ', ' ', ' ',
-    //     ' ', ' ', ' ', ' ', 'Q',
-    //     ' ', ' ', ' ', 'R', ' ',
-    //     ' ', ' ', ' ', ' ', 'K'
-    // };
     
     int k = 0;
     whiteKingX = 4;
@@ -653,6 +599,7 @@ static void placePieces5x5(){
     displayBoard();
 }
 
+//checks if the move is valid
 static bool isValid(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
@@ -665,6 +612,7 @@ static bool isValid(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]
     }
 }
 
+//checks if the board is empty
 static bool isEmpty(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
@@ -674,7 +622,8 @@ static bool isEmpty(int x, int y, TILE board[BOARD_SIZE][BOARD_SIZE]){
         return false;
     }
 }
-
+ 
+//checks if the piece is a valid enemy
 static bool isEnemy(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]){
     if(x < 0 || x > BOARD_SIZE - 1 || y < 0 || y > BOARD_SIZE - 1){
         return false;
@@ -685,6 +634,7 @@ static bool isEnemy(int x, int y, int colour, TILE board[BOARD_SIZE][BOARD_SIZE]
     }
 }
 
+//get the colour of the piece
 int getColour(char c){
     //Uppercase = WHITE, Lowercase = BLACK 
     char capsC = toupper(c);
@@ -699,10 +649,12 @@ int getColour(char c){
     }
 }
 
+
 int getIndex(int x, int y){
     return x*8 + y;
 }
 
+//generates the LED array to display on the board
 int* convertToLEDarray(int* array){
     int* binaryArray = (int*)malloc(8 * sizeof(int));
     for(int i = 0; i < 8; i++){
@@ -715,6 +667,7 @@ int* convertToLEDarray(int* array){
     return binaryArray;
 }
 
+//gets the tile using coordinates
 TILE getTile(int x, int y){
     if(x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE){
         return board[x][y];
@@ -724,6 +677,7 @@ TILE getTile(int x, int y){
     }
 }
 
+//move a piece to a certain tile
 void movePiece(int x, int y, int x2, int y2){
     if(board[x][y].piece == EMPTY){
         printf("ERROR: CANNOT MOVE EMPTY TILE");
@@ -746,6 +700,7 @@ void movePiece(int x, int y, int x2, int y2){
     } 
 }
 
+//checks if nummber is within the board size 
 static bool inBounds(int n){
     if(n >= 0 && n < BOARD_SIZE){
         return true;
@@ -754,6 +709,7 @@ static bool inBounds(int n){
     }
 }
 
+//get the x coordinate of king
 int getKingX(int colour){
     if(colour == WHITE){
         return whiteKingX;
@@ -765,6 +721,7 @@ int getKingX(int colour){
     }
 }
 
+//get the y coordinate of king
 int getKingY(int colour){
     if(colour == WHITE){
         return whiteKingY;
@@ -775,15 +732,4 @@ int getKingY(int colour){
         exit(1);
     }
 }
-/*
-read the switches
-if ANY tile is picked up
-then check for 2 cases:
-    ANOTHER tile is picked up -> we are capturing:
-        wait until that tile reads 1
-        move the piece to that spot
-    OR ANOTHER tile is placed -> we are moving to an empty spot:
-        then move the piece to that spot
-
-*/
 

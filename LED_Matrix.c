@@ -25,29 +25,6 @@ struct DigitInfo {
     unsigned char digit_bytes[7]; // holds hardcoded byte values 
 };
 
-/*
-static void runCommand(char* command)
-{
-    // Execute the shell command (output into pipe)
-    FILE *pipe = popen(command, "r");
-    // Ignore output of the command; but consume it
-    // so we don't get an error when closing the pipe.
-    char buffer[1024];
-    while (!feof(pipe) && !ferror(pipe)) {
-        if (fgets(buffer, sizeof(buffer), pipe) == NULL)
-            break;
-    // printf("--> %s", buffer); // Uncomment for debugging
-    }
-    // Get the exit code from the pipe; non-zero is an error:
-    int exitCode = WEXITSTATUS(pclose(pipe));
-    if (exitCode != 0) {
-        perror("Unable to execute command:");
-        printf(" command: %s\n", command);
-        printf(" exit code: %d\n", exitCode);
-    }
-}
-*/
-
 static void runCommand(char* command)
 {
     // Execute the shell command (output into pipe)
@@ -378,31 +355,3 @@ void displayFromArr(const int LED_Arr[]){
         j++;
     }
 }
-/*
-//main functions
-int main(){
-    
-    reset_Display();
-    sleepForMs(100);
-    turnOffDisplay();
-    turnOnDisplay();
-    displayInteger(197);
-    // sleepForMs(2000);
-    // reset_Display();
-
-    // int i =0;
-    // double x = 7.0;
-    // while(i < 10){
-        
-    //     printf("%f \n", x);
-    //     displayDouble(x);
-    //     sleepForMs(1500);
-    //     x+=0.1;
-    //     i++;
-    // }
-    // displayDouble(11.8);
-    turnOffDisplay();
-    turnOnDisplay();
-    return 0;
-}
-*/

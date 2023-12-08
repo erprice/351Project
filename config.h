@@ -11,7 +11,7 @@ struct Pin
 };
 
 
-void configPin(int header_num, int pin_num, int in_or_out);
+void configPin(int header_num, int pin_num, int in_or_out); //helps to configure a certain pin 
 void configManyPins(struct Pin array[], int size, int in_or_out); //in = 0, out = 1
 
 #endif

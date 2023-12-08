@@ -46,22 +46,8 @@ int wrongY;
 int capturingX;
 int capturingY;
 
-// static int readIntFromFile(char* filePath){
-//     static char* pointer = "0\n";
 
-//     FILE *pFile = fopen(filePath, "r");
-//     //int num;
-//     if (pFile == NULL) {
-//         printf("ERROR: Unable to open file (%s) for read\n", filePath);
-//         exit(-1);
-//     }
-//     char buff[100];
-//     fgets(buff, 100, pFile);
-//     fclose(pFile);
-//     //printf(filePath);
-//     return strcmp(buff, pointer);
-// }
-
+//Led arrays
 const int OFF[8] = {[0 ... 7] = 0b00000000};
 const int ON[8*8] = {[0 ... 63] = 0b11111111};
 
@@ -102,15 +88,11 @@ void gameUpdate(){
         exit(1);
     }
     switch (state){
-    case WAITING:
+    case WAITING: //Waits for player to pick up a piece
         printf("WAITING\n");
-        //Turn off all leds
-        //printf("RESET DISPLAY\n");
-        //TODO: LEDs off
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
                 TILE currentTile = getTile(i, j);
-                //printf("Piece: %c, Val: %d\n", currentTile.piece, currentTile.rs.value);
                 if(currentTile.piece != EMPTY && getColour(currentTile.piece) == currentColour && currentTile.rs.value == 0){
                     //Piece picked up
                     state = PICKED_UP;
@@ -130,13 +112,6 @@ void gameUpdate(){
                         exit(1);
                     }
                     moveArr2 = convertToLEDarray(moveArr);
-                    // for (int g = 0; g < 64; ++g) {
-                    //     printf("%d ", moveArr[g]);
-                    //     if((g+1) % 8 == 0){
-                    //         printf("\n");
-                    //     }
-                    // }
-                    // printf("\n");
                     displayFromArr(moveArr2);
                     //light up LEDs
                     break;
@@ -151,7 +126,7 @@ void gameUpdate(){
             }
         }
         break;
-    case PICKED_UP:
+    case PICKED_UP: //player has picked up a piece. Must then find the possible moves.
         printf("PICKED_UP\n");
         for(int i = 0; i < BOARD_SIZE; i++){
             for(int j = 0; j < BOARD_SIZE; j++){
@@ -161,7 +136,7 @@ void gameUpdate(){
                     printf("PLACED BACK DOWN");
                     state = WAITING;
                     reset_Display();
-                    //TODO: if placed back on its own tile
+                    //if placed back on its own tile
                 } else if(currentTile.piece == EMPTY && currentTile.rs.value == 1){
                     //Moving piece to empty tile
                     if(moveArr[getIndex(i, j)] == 1){
@@ -187,52 +162,35 @@ void gameUpdate(){
                         state = CAPTURING;
                         capturingX = i;
                         capturingY = j;
-                    } else {
+                    } else { //if it is an invalid capture
                         state = INVALID_CAPTURE;
                         wrongX = i;
                         wrongY = j;
-                        //printf("CANNOT CAPTURE THERE\n");
+                        
                     }
 
-                    // //wait until it reads 1 again
-                    // //Capturing a piece
-                    // if(moveArr[getIndex(i, j)] == 1){
-                    //     movePiece(currentX, currentY, i, j);
-                    //     free(moveArr);
-                    //     turn = !turn; //change turns
-                    //     currentColour = !currentColour; //Change colour
-                    //     state = WAITING;
-                    //     reset_Display();
-                    // } else {
-                    //     state = INVALID_PLACEMENT;
-                    //     printf("INVALID PLACEMENT\n");
-                    //     //Not valid placement
-                    // }
                 } 
             }
         }
         break;
-    case CAPTURING:
+    case CAPTURING: //An opposite colour piece has been picked up (assumed to be a capture)
         {
         printf("CAPTURING\n");
         TILE temp = getTile(capturingX, capturingY);
         if(temp.rs.value == 1){
             movePiece(currentX, currentY, capturingX, capturingY);
-            //free(moveArr);
-            //free(moveArr2);
             turn = !turn;
-            //currentColour = !currentColour;
             state = WAITING;
             reset_Display();
         }
         break;
         }
-    case WRONG_TURN:
+    case WRONG_TURN: //Wrong colour piece picked up
         {
         printf("WRONG_TURN\n");
+        //LIGHT UP ALL LEDS AS WARNING
         displayFromArr(ON);
         TILE currentTile;
-        //TODO: LIGHT UP ALL LEDS AS WARNING
         currentTile = getTile(currentX, currentY);
         if(currentTile.rs.value == 1){
             state = WAITING;
@@ -240,9 +198,10 @@ void gameUpdate(){
         }
         break;
         }
-    case INVALID_PLACEMENT:
+    case INVALID_PLACEMENT: //Placed a piece in the wrong spot
         {
         printf("INVALID_PLACEMENT\n");
+        //LIGHT UP ALL LEDS AS WARNING
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         if(tile.rs.value == 0){
@@ -251,22 +210,23 @@ void gameUpdate(){
         }
         break;
         }
-    case INVALID_CAPTURE:
+    case INVALID_CAPTURE: //Wrong piece picked up for capture
         {
         printf("INVALID_CAPTURE\n");
+        //LIGHT UP ALL LEDS AS WARNING
         displayFromArr(ON);
         TILE tile = getTile(wrongX, wrongY);
         TILE currentTile = getTile(currentX, currentY);
-        if(tile.rs.value == 1 && currentTile.rs.value == 0){
+        if(tile.rs.value == 1 && currentTile.rs.value == 0){ //PICKED UP
             state = PICKED_UP;
             displayFromArr(moveArr2);
-        } else if (tile.rs.value == 1 && currentTile.rs.value == 1){
+        } else if (tile.rs.value == 1 && currentTile.rs.value == 1){ //WAITING
             state = WAITING;
             displayFromArr(OFF);
         }
         break;
         }
-    case CHECK:
+    case CHECK: //Check if a player is in checkmate
         {
         printf("CHECK\n");
         bool isCheckMate = true;
@@ -299,12 +259,13 @@ void gameUpdate(){
         }
         if(isCheckMate){
             state = CHECKMATE;
+            stopThreads(); //ends the game
         } else {
             state = WAITING;
         }
         break;
         }
-    case CHECKMATE:
+    case CHECKMATE: //Game is over. Close the program
         printf("CHECKMATE\n");
         exit(1);
         break;
@@ -314,10 +275,8 @@ void gameUpdate(){
     }
 }
 
+//Updates the hall effect sensors
 void reedSwitchUpdate(){
-    // if(readIntFromFile("/sys/class/gpio/gpio75/value")){
-    //     stopThreads();
-    // }
     for(int i = 0; i < BOARD_SIZE; i++){
         for(int j = 0; j < BOARD_SIZE; j++){
             TILE currentTile = getTile(i, j);
@@ -326,6 +285,7 @@ void reedSwitchUpdate(){
     }
 }
 
+//frees the global arrays
 void freeArrays(){
     if(moveArr != NULL){
         free(moveArr);
@@ -334,6 +294,7 @@ void freeArrays(){
     }
 }
 
+// function for the thread to run (gameUpdate()) 
 static void* gameFunction(void* arg){
     while(1){
         gameUpdate();
@@ -345,6 +306,7 @@ static void* gameFunction(void* arg){
     return NULL;
 }
 
+//function for the thread to run (reedUpdate())
 static void* reedFunction(void* arg){
     while(1){
 
@@ -356,14 +318,16 @@ static void* reedFunction(void* arg){
     return NULL;
 }
 
+//starts the threads
 void startThreads(void){
     reset_Display();
-    pthread_create(&reed_thread_id, NULL, reedFunction, NULL);
+    pthread_create(&reed_thread_id, NULL, reedFunction, NULL); //thread for checking sensor vales
     pthread_mutex_init(&reed_mutex, NULL);
-    pthread_create(&game_thread_id, NULL, gameFunction, NULL);
+    pthread_create(&game_thread_id, NULL, gameFunction, NULL);// thread for running the game
     pthread_mutex_init(&reed_mutex, NULL);
 }
 
+//exits the game
 void stopThreads(void){
     reset_Display();
     FLAG_CANCEL = true;

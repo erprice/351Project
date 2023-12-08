@@ -12,11 +12,11 @@ typedef enum {
     WRONG_TURN
 } STATE;
 
-void gameUpdate();
+void gameUpdate(); //keeps track of all the moves and captures
 
-void reedSwitchUpdate();
+void reedSwitchUpdate(); //checks the sensor values consistently and update the switch values
 
-STATE getState();
+STATE getState(); //gets the current state of the game
 
-void freeArrays();
+void freeArrays(); //deallocates dynamic array
 #endif

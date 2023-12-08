@@ -9,22 +9,6 @@
 char *pointer1 = "0\n";
 const int MAX_LENGTH1 = 1024;
 
-// int read_Button() //reads the value of the gpio pin by opening the file and comparing the read value with 0\n
-// {
-//     FILE * f = fopen("/sys/class/gpio/gpio75/value",  "r"); //open file
-//     if (f == NULL) //if the file cannot be opened exit program and print error.
-//     {
-//         printf("ERROR: Unable to open file (%s) for read\n", "/sys/class/gpio/gpio72/value");
-//         exit(-1);
-//     }
-//     sleep(.005);
-//     char buff[MAX_LENGTH1];
-//     fgets(buff, MAX_LENGTH1, f); //read content pin file
-//     sleep(1.0050);
-//     fclose(f); //close file
-//     return strcmp(buff, pointer1); //if 0\n is read return 0 otherwise return 1 (gpio pin is active low so 0 = pressed)
-// }
-
 void print2DArray(int rows, int cols, int array[rows][cols]) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -58,28 +42,15 @@ void printArray(int arr[], int size) {
 }
 
 int main(){
-    //configPin(8,42, 0);
     initChessboard();
     set_i2cFileDesc();
     reset_Display();
-    startThreads();
+    startThreads(); //start the threads 
+
+    //this loop was needed to keep the threads running multiple times
     while(1){
         //do nothing
     }
-    // stopThreads();
-    // while(1){
-    //     printf("WAITING = 0, PICKED_UP = 1 ->%d\n", getState());
-    //     displayRSValues();
-    //     printf("\n");
-    //     displayBoard();
-    //     printf("-----\n");
-    //     printf("X value: ");
-    //     scanf("%d", &x);
-    //     printf("Y value: ");
-    //     scanf("%d", &y);
-    //     printf("\n");
-    //     TILE tempTile = getTile(x, y);
-    //     setRSValue(x, y, (!tempTile.rs.value));
-    //     gameUpdate();
-    // }
+   
+   //stop threads when the game enters CHECKMATE state (gamelogic.c)
 }
